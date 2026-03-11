@@ -1,18 +1,22 @@
-import type { Product } from "../data/products"
+import type { Product } from "../data/products";
 
-type Props = {
-  product: Product
+type ProductCardProps = {
+    product: Product;
+    isFavorite: boolean;
+    onToggleFavorite: (productId: number) => void;
 }
 
-function ProductCard({ product }: Props) {
-  return (
-    <div className="card">
-      <img src={product.image} width="120" />
-      <h3>{product.name}</h3>
-      <p>${product.price}</p>
-      <button>Add to cart</button>
-    </div>
-  )
+function ProductCard({product, isFavorite, onToggleFavorite}:ProductCardProps){
+    return(
+        <div className="card">
+            <img src={product.image} alt={product.name} />
+            <h3 className="card-title" title={product.name}>{product.name}</h3>
+            <p>{product.price} лей</p>
+            <button type="button" onClick={()=>onToggleFavorite(product.id)}>
+              {isFavorite ? "В избранном" : "В избранное"}
+            </button>
+        </div>
+    )
 }
 
-export default ProductCard
+export default ProductCard  

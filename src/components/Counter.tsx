@@ -1,11 +1,11 @@
-type Props = {
-    count: number
-  }
-  
-  function Counter({ count }: Props) {
-    return (
-      <p>Found books: {count}</p>
-    )
-  }
-  
-  export default Counter
+type CounterProps={
+  count:number;
+}
+
+function Counter({count}:CounterProps){
+  return (
+      <p>Найденные книги: {count}</p>
+  )
+}
+
+export default Counter
