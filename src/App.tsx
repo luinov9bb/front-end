@@ -1,33 +1,46 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react"
+import "./App.css"
+
+import Header from "./components/Header"
+import Hero from "./components/Hero"
+import SearchBar from "./components/SearchBar"
+import FilterButtons from "./components/FilterButtons"
+import ProductList from "./components/ProductList"
+import Counter from "./components/Counter"
+import Footer from "./components/Footer"
+
+import { products } from "./data/products"
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const [search, setSearch] = useState("")
+  const [category, setCategory] = useState("all")
+
+  const filteredProducts = products
+    .filter((p) => {
+      const name = (p?.name ?? "").toLowerCase()
+      const term = (search ?? "").toLowerCase()
+      return name.includes(term)
+    })
+    .filter((p) =>
+      category === "all" ? true : p.category === category
+    )
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Header />
+
+      <Hero />
+
+      <SearchBar search={search} setSearch={setSearch} />
+
+      <FilterButtons setCategory={setCategory} />
+
+      <Counter count={filteredProducts.length} />
+
+      <ProductList products={filteredProducts} />
+
+      <Footer />
     </>
   )
 }
