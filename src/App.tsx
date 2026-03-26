@@ -5,11 +5,14 @@ import Header from "./components/Header"
 import Footer from "./components/Footer"
 import Home from "./pages/Home"
 import Catalog from "./pages/Catalog"
+import { useFavorites } from "./context/FavoritesContext"
 
 function App(){
+    const { favoriteIds } = useFavorites();
+    
     return(
         <>
-            <Header favoritesCount={0} />
+            <Header favoritesCount={favoriteIds.size} />
             
             <Routes>
                 <Route path="/" element={<Home />} />

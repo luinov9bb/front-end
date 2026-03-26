@@ -4,6 +4,7 @@ import FilterButtons from "../components/FilterButtons";
 import ProductList from "../components/ProductList";
 import Counter from "../components/Counter";
 import { products, type Product } from "../data/products";
+import { useFavorites } from "../context/FavoritesContext";
 
 function Catalog() {
   const [search, setSearch] = useState("");
@@ -11,7 +12,7 @@ function Catalog() {
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [favoriteIds, setFavoriteIds] = useState<Set<number>>(new Set());
+  const { favoriteIds, toggleFavorite } = useFavorites();
 
   const loadProducts = async () => {
     try {
@@ -68,18 +69,6 @@ function Catalog() {
     .filter((p) => p.name.toLowerCase().includes(search.toLocaleLowerCase()))
     .filter((p) => (category === "All" ? true : p.category === category));
 
-  const handleToggleFavorite = (productId: number) => {
-    setFavoriteIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(productId)) {
-        next.delete(productId);
-      } else {
-        next.add(productId);
-      }
-      return next;
-    });
-  };
-
   return (
     <>
       <SearchBar search={search} setSearch={setSearch} />
@@ -112,7 +101,7 @@ function Catalog() {
             <ProductList
               products={filteredProducts}
               favoriteIds={favoriteIds}
-              onToggleFavorite={handleToggleFavorite}
+              onToggleFavorite={toggleFavorite}
             />
           )}
         </>
