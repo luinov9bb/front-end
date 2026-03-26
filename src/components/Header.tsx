@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 type HeaderProps = {
   favoritesCount: number;
 }
@@ -10,8 +12,8 @@ function Header({ favoritesCount }: HeaderProps) {
       <h1>BookStore</h1>
       <div className="header-right">
         <nav>
-          <a href="#">Home</a>
-          <a href="#">Catalog</a>
+          <Link to="/">Home</Link>
+          <Link to="/catalog">Catalog</Link>
           <a href="#">Contacts</a>
         </nav>
 
