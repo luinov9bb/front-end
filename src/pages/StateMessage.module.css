@@ -1,0 +1,25 @@
+.stateMessage {
+  padding: 20px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.stateMessage p {
+  margin: 0;
+  font-size: 15px;
+}
+
+.loading p {
+  color: #4b5563;
+}
+
+.error p {
+  color: #b91c1c;
+}
+
+.empty p {
+  color: #6b7280;
+}

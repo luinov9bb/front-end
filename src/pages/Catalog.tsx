@@ -5,6 +5,7 @@ import ProductList from "../components/ProductList";
 import Counter from "../components/Counter";
 import { products, type Product } from "../data/products";
 import { useFavorites } from "../context/FavoritesContext";
+import stateMessageStyles from "../pages/StateMessage.module.css";
 
 function Catalog() {
   const [search, setSearch] = useState("");
@@ -75,13 +76,13 @@ function Catalog() {
       <FilterButtons setCategory={setCategory} />
 
       {loading && (
-        <section className="state-message state-message--loading">
+        <section className={`${stateMessageStyles.stateMessage} ${stateMessageStyles.loading}`}>
           <p>Загрузка...</p>
         </section>
       )}
 
       {!loading && error && (
-        <section className="state-message state-message--error">
+        <section className={`${stateMessageStyles.stateMessage} ${stateMessageStyles.error}`}>
           <p>{error}</p>
           <button onClick={loadProducts}>Повторить попытку</button>
         </section>
@@ -94,7 +95,7 @@ function Catalog() {
           </section>
 
           {filteredProducts.length === 0 ? (
-            <section className="state-message state-message--empty">
+            <section className={`${stateMessageStyles.stateMessage} ${stateMessageStyles.empty}`}>
               <p>Ничего не найдено</p>
             </section>
           ) : (

@@ -1,4 +1,5 @@
 import type { Product } from "../data/products";
+import styles from "./ProductCard.module.css";
 
 type ProductCardProps = {
     product: Product;
@@ -8,9 +9,9 @@ type ProductCardProps = {
 
 function ProductCard({product, isFavorite, onToggleFavorite}:ProductCardProps){
     return(
-        <div className="card">
+        <div className={styles.card}>
             <img src={product.image} alt={product.name} />
-            <h3 className="card-title" title={product.name}>{product.name}</h3>
+            <h3 className={styles.cardTitle} title={product.name}>{product.name}</h3>
             <p>{product.price} лей</p>
             <button type="button" onClick={()=>onToggleFavorite(product.id)}>
               {isFavorite ? "В избранном" : "В избранное"}

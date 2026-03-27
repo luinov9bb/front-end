@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import styles from "./Header.module.css";
 
 type HeaderProps = {
   favoritesCount: number;
@@ -10,18 +11,18 @@ function Header({ favoritesCount }: HeaderProps) {
   return (
     <header>
       <h1>BookStore</h1>
-      <div className="header-right">
+      <div className={styles.headerRight}>
         <nav>
           <Link to="/">Home</Link>
           <Link to="/catalog">Catalog</Link>
           <a href="#">Contacts</a>
         </nav>
 
-        <button className="cart-button" type="button" aria-label="Избранное">
-          <span className="cart-icon" aria-hidden="true">❤</span>
+        <button className={styles.cartButton} type="button" aria-label="Избранное">
+          <span className={styles.cartIcon} aria-hidden="true">❤</span>
           <span>Избранное</span>
           {favoritesCount > 0 && (
-            <span className="cart-badge" aria-label={`В избранном: ${badgeText}`}>
+            <span className={styles.cartBadge} aria-label={`В избранном: ${badgeText}`}>
               {badgeText}
             </span>
           )}

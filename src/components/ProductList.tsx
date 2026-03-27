@@ -1,5 +1,6 @@
 import type { Product } from "../data/products"
 import ProductCard from "./ProductCard"
+import styles from "./ProductList.module.css"
 
 type ProductListProps={
     products: Product[];
@@ -9,7 +10,7 @@ type ProductListProps={
 
 function ProductList({products, favoriteIds, onToggleFavorite}:ProductListProps){
     return(
-        <section className="grid">
+        <section className={styles.grid}>
             {products.map((p)=>(
               <ProductCard
                 key={p.id}

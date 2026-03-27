@@ -1,3 +1,5 @@
+import styles from "./SearchBar.module.css";
+
 type SearchBarProps = {
   search: string;
   setSearch: (value:string) => void;
@@ -5,9 +7,9 @@ type SearchBarProps = {
 
 function SearchBar ({search, setSearch} : SearchBarProps){
   return (
-      <section className="search-section">
+      <section className={styles.searchSection}>
           <input
-              className="search-input"
+              className={styles.searchInput}
               type="text"
               placeholder="Поиск книг..."
               value={search}

@@ -1,3 +1,4 @@
+import AboutStyles from "../pages/About.module.css";
 import { useNavigate } from "react-router-dom";
 import Hero from "../components/Hero";
 
@@ -12,7 +13,7 @@ function Home() {
     <>
       <Hero onGoToCatalog={handleGoToCatalog} />
 
-      <section className="about">
+      <section className={AboutStyles.about}>
         <h2>О магазине</h2>
         <p>
           Наш онлайн-магазин книг предлагает широкий выбор литературы:
