@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
-import SearchBar from "../components/SearchBar";
 import FilterButtons from "../components/FilterButtons";
 import ProductList from "../components/ProductList";
 import Counter from "../components/Counter";
 import { products, type Product } from "../data/products";
 import { useFavorites } from "../context/FavoritesContext";
 import stateMessageStyles from "../pages/StateMessage.module.css";
+import styles from "./Catalog.module.css";
 
-function Catalog() {
-  const [search, setSearch] = useState("");
+type CatalogProps = {
+  search: string;
+  setSearch: (value: string) => void;
+};
+
+function Catalog({ search, setSearch }: CatalogProps) {
   const [category, setCategory] = useState("All");
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -72,43 +76,47 @@ function Catalog() {
 
   return (
     <>
-      <SearchBar search={search} setSearch={setSearch} />
-      <FilterButtons setCategory={setCategory} />
-
-      {loading && (
-        <section className={`${stateMessageStyles.stateMessage} ${stateMessageStyles.loading}`}>
-          <p>Загрузка...</p>
-        </section>
-      )}
-
-      {!loading && error && (
-        <section className={`${stateMessageStyles.stateMessage} ${stateMessageStyles.error}`}>
-          <p>{error}</p>
-          <button onClick={loadProducts}>Повторить попытку</button>
-        </section>
-      )}
-
-      {!loading && !error && (
-        <>
-          <section id="catalog">
-            <Counter count={filteredProducts.length} />
-          </section>
-
-          {filteredProducts.length === 0 ? (
-            <section className={`${stateMessageStyles.stateMessage} ${stateMessageStyles.empty}`}>
-              <p>Ничего не найдено</p>
+      <div className={styles.catalogRow}>
+        <aside className={styles.sidebar}>
+          <FilterButtons setCategory={setCategory} />
+        </aside>
+        <main className={styles.content}>
+          {loading && (
+            <section className={`${stateMessageStyles.stateMessage} ${stateMessageStyles.loading}`}>
+              <p>Загрузка...</p>
             </section>
-          ) : (
-            <ProductList
-              products={filteredProducts}
-              favoriteIds={favoriteIds}
-              onToggleFavorite={toggleFavorite}
-            />
           )}
-        </>
-      )}
+
+          {!loading && error && (
+            <section className={`${stateMessageStyles.stateMessage} ${stateMessageStyles.error}`}>
+              <p>{error}</p>
+              <button onClick={loadProducts}>Повторить попытку</button>
+            </section>
+          )}
+
+          {!loading && !error && (
+            <>
+              <section id="catalog">
+                <Counter count={filteredProducts.length} />
+              </section>
+
+              {filteredProducts.length === 0 ? (
+                <section className={`${stateMessageStyles.stateMessage} ${stateMessageStyles.empty}`}>
+                  <p>Ничего не найдено</p>
+                </section>
+              ) : (
+                <ProductList
+                  products={filteredProducts}
+                  favoriteIds={favoriteIds}
+                  onToggleFavorite={toggleFavorite}
+                />
+              )}
+            </>
+          )}
+        </main>
+      </div>
     </>
   );
 }
 
-export default Catalog;
+export default Catalog; 

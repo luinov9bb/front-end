@@ -7,6 +7,7 @@ type FilterButtonsProps = {
 function FilterButtons({ setCategory} : FilterButtonsProps){
   return (
       <section className={styles.section}>
+          <h2 className={styles.title}>Жанры</h2>
           <button onClick={() => setCategory("All")}>Все жанры</button>
           <button onClick={() => setCategory("programming")}>Программирование</button>
           <button onClick={() => setCategory("fiction")}>Фэнтези</button>
