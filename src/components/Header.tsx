@@ -3,12 +3,14 @@ import styles from "./Header.module.css";
 
 type HeaderProps = {
   favoritesCount: number;
+  cartCount: number;
   search: string;
   setSearch: (value: string) => void;
 }
 
-function Header({ favoritesCount, search, setSearch }: HeaderProps) {
+function Header({ favoritesCount, cartCount, search, setSearch }: HeaderProps) {
   const badgeText = favoritesCount > 99 ? "99+" : String(favoritesCount);
+  const cartBadgeText = cartCount > 99 ? "99+" : String(cartCount);
   const navigate = useNavigate();
 
   return (
@@ -37,7 +39,7 @@ function Header({ favoritesCount, search, setSearch }: HeaderProps) {
           <a href="#">Contacts</a>
         </nav>
 
-        <button className={styles.cartButton} type="button" aria-label="Избранное">
+        <button className={styles.cartButton} type="button" aria-label="Избранное" onClick={() => navigate("/favorites")}>
           <span className={styles.cartIcon} aria-hidden="true">❤</span>
           <span>Избранное</span>
           {favoritesCount > 0 && (
@@ -47,10 +49,15 @@ function Header({ favoritesCount, search, setSearch }: HeaderProps) {
           )}
         </button>
 
-        <button className={styles.cartButton} type="button" aria-label="В корзине">
+        <Link to="/cart" className={styles.cartButton} aria-label="В корзине">
           <span className={styles.cartIcon} aria-hidden="true">🛒</span>
           <span>В корзине</span>
-        </button>
+          {cartCount > 0 && (
+            <span className={styles.cartBadge} aria-label={`В корзине: ${cartBadgeText}`}>
+              {cartBadgeText}
+            </span>
+          )}
+        </Link>
       </div>
     </header>
   )

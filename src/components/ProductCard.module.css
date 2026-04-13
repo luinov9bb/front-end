@@ -41,8 +41,30 @@
   color: #111827;
 }
 
-.card button {
+.actions {
+  display: flex;
+  gap: 8px;
   margin-top: auto;
+}
+
+.card button {
+  flex: 1;
+  margin-top: 0;
+}
+
+.cartBtn {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.cartBtn:hover {
+  background: #45a049;
 }
 
 .card:hover {
