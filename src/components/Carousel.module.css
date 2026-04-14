@@ -1,8 +1,8 @@
 .carousel {
   position: relative;
-  width: calc(100% - 32px);
+  width: calc(100% - clamp(16px, 4vw, 32px));
   max-width: 1400px;
-  margin: 20px auto;
+  margin: clamp(12px, 2vw, 20px) auto;
   background: #111827;
   overflow: hidden;
   border-radius: 12px;
@@ -11,7 +11,7 @@
 .carouselContainer {
   position: relative;
   width: 100%;
-  padding-bottom: 50%;
+  padding-bottom: min(50%, 700px);
   overflow: hidden;
   background: #111827;
 }
@@ -45,10 +45,10 @@
   background: rgba(255, 255, 255, 0.3);
   border: none;
   color: white;
-  font-size: 40px;
+  font-size: clamp(24px, 5vw, 40px);
   padding: 0;
-  width: 50px;
-  height: 50px;
+  width: clamp(36px, 8vw, 50px);
+  height: clamp(36px, 8vw, 50px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -58,6 +58,8 @@
   transition: background 0.2s ease;
   font-weight: 300;
   line-height: 1;
+  min-height: 40px;
+  min-width: 40px;
 }
 
 .prevButton:hover,
@@ -66,32 +68,36 @@
 }
 
 .prevButton {
-  left: 16px;
+  left: clamp(8px, 2vw, 16px);
 }
 
 .nextButton {
-  right: 16px;
+  right: clamp(8px, 2vw, 16px);
 }
 
 .dots {
   position: absolute;
-  bottom: 24px;
+  bottom: clamp(12px, 3vw, 24px);
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 8px;
+  gap: clamp(4px, 1vw, 8px);
   z-index: 10;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .dot {
-  width: 12px;
-  height: 12px;
+  width: clamp(8px, 1.5vw, 12px);
+  height: clamp(8px, 1.5vw, 12px);
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.4);
   border: none;
   cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease;
   padding: 0;
+  min-height: 8px;
+  min-width: 8px;
 }
 
 .dot:hover {
@@ -105,49 +111,90 @@
 
 .counter {
   position: absolute;
-  bottom: 24px;
-  right: 24px;
+  bottom: clamp(12px, 3vw, 24px);
+  right: clamp(12px, 2vw, 24px);
   color: rgba(255, 255, 255, 0.8);
-  font-size: 14px;
+  font-size: clamp(11px, 1.5vw, 14px);
   z-index: 10;
   background: rgba(0, 0, 0, 0.3);
-  padding: 4px 8px;
+  padding: clamp(3px, 0.5vw, 4px) clamp(6px, 1vw, 8px);
   border-radius: 4px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .carouselContainer {
-    padding-bottom: 60%;
+    padding-bottom: min(55%, 600px);
   }
 
   .prevButton,
   .nextButton {
-    width: 40px;
-    height: 40px;
-    font-size: 28px;
+    width: clamp(32px, 7vw, 44px);
+    height: clamp(32px, 7vw, 44px);
+    font-size: clamp(20px, 4vw, 32px);
   }
 
   .prevButton {
-    left: 8px;
+    left: clamp(6px, 1.5vw, 12px);
   }
 
   .nextButton {
-    right: 8px;
+    right: clamp(6px, 1.5vw, 12px);
   }
 
   .dots {
-    bottom: 16px;
-    gap: 6px;
+    bottom: clamp(10px, 2vw, 16px);
+    gap: clamp(3px, 0.8vw, 6px);
   }
 
   .dot {
-    width: 10px;
-    height: 10px;
+    width: clamp(7px, 1.3vw, 10px);
+    height: clamp(7px, 1.3vw, 10px);
   }
 
   .counter {
-    bottom: 16px;
-    right: 16px;
-    font-size: 12px;
+    bottom: clamp(10px, 2vw, 16px);
+    right: clamp(10px, 1.5vw, 16px);
+    font-size: clamp(10px, 1.3vw, 12px);
+  }
+}
+
+@media (max-width: 768px) {
+  .carouselContainer {
+    padding-bottom: min(60%, 500px);
+  }
+
+  .carousel {
+    width: calc(100% - clamp(12px, 3vw, 20px));
+    margin: clamp(8px, 1.5vw, 16px) auto;
+  }
+
+  .prevButton,
+  .nextButton {
+    width: clamp(28px, 6vw, 36px);
+    height: clamp(28px, 6vw, 36px);
+    font-size: clamp(16px, 3vw, 24px);
+  }
+}
+
+@media (max-width: 480px) {
+  .carouselContainer {
+    padding-bottom: min(65%, 400px);
+  }
+
+  .prevButton,
+  .nextButton {
+    width: clamp(24px, 5vw, 32px);
+    height: clamp(24px, 5vw, 32px);
+    font-size: clamp(14px, 2.5vw, 20px);
+  }
+
+  .dots {
+    bottom: clamp(8px, 1.5vw, 12px);
+  }
+
+  .counter {
+    font-size: clamp(9px, 1.2vw, 10px);
+    bottom: clamp(8px, 1.5vw, 12px);
+    right: clamp(8px, 1.5vw, 12px);
   }
 }
