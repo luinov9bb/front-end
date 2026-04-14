@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import styles from "./Header.module.css";
 
 type HeaderProps = {
@@ -9,9 +10,18 @@ type HeaderProps = {
 }
 
 function Header({ favoritesCount, cartCount, search, setSearch }: HeaderProps) {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const badgeText = favoritesCount > 99 ? "99+" : String(favoritesCount);
   const cartBadgeText = cartCount > 99 ? "99+" : String(cartCount);
   const navigate = useNavigate();
+
+  const closeMobileMenu = () => setMobileMenuOpen(false);
+
+  const handleSearch = (value: string) => {
+    setSearch(value);
+    navigate("/catalog");
+    closeMobileMenu();
+  };
 
   return (
     <header className={styles.header}>
@@ -25,13 +35,24 @@ function Header({ favoritesCount, cartCount, search, setSearch }: HeaderProps) {
           type="text"
           placeholder="Поиск книг..."
           value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-            navigate("/catalog");
-          }}
+          onChange={(e) => handleSearch(e.target.value)}
+          aria-label="Поиск книг"
         />
       </div>
 
+      {/* Hamburger menu button */}
+      <button 
+        className={`${styles.hamburger} ${mobileMenuOpen ? styles.active : ''}`}
+        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        aria-label="Меню"
+        aria-expanded={mobileMenuOpen}
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      {/* Desktop Navigation and Actions */}
       <div className={styles.actions}>
         <nav>
           <Link to="/">Home</Link>
@@ -59,6 +80,44 @@ function Header({ favoritesCount, cartCount, search, setSearch }: HeaderProps) {
           )}
         </Link>
       </div>
+
+      {/* Mobile Menu */}
+      <nav className={`${styles.mobileMenu} ${mobileMenuOpen ? styles.open : ''}`}>
+        <Link to="/" onClick={closeMobileMenu}>Home</Link>
+        <Link to="/catalog" onClick={closeMobileMenu}>Catalog</Link>
+        <a href="#" onClick={closeMobileMenu}>Contacts</a>
+        
+        <div className={styles.mobileDivider}></div>
+        
+        <button 
+          className={styles.mobileCartButton} 
+          type="button" 
+          onClick={() => {
+            navigate("/favorites");
+            closeMobileMenu();
+          }}
+          aria-label="Избранное"
+        >
+          <span className={styles.cartIcon}>❤</span>
+          <span>Избранное</span>
+          {favoritesCount > 0 && (
+            <span className={styles.cartBadge}>{badgeText}</span>
+          )}
+        </button>
+
+        <Link 
+          to="/cart" 
+          className={styles.mobileCartButton} 
+          onClick={closeMobileMenu}
+          aria-label="В корзине"
+        >
+          <span className={styles.cartIcon}>🛒</span>
+          <span>В корзине</span>
+          {cartCount > 0 && (
+            <span className={styles.cartBadge}>{cartBadgeText}</span>
+          )}
+        </Link>
+      </nav>
     </header>
   )
 }

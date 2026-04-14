@@ -1,10 +1,37 @@
 .footer {
-  background-color: #111827;
-  color: #9ca3af;
+  background-color: #FFFFFF;
+  color: #666666;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding: 18px 0 24px;
-  font-size: 13px;
+  justify-content: center;
+  gap: clamp(4px, 1vw, 6px);
+  padding: clamp(12px, 2vw, 18px) clamp(12px, 2vw, 20px) clamp(16px, 2vw, 24px);
+  font-size: clamp(11px, 1.5vw, 13px);
+  font-family: 'Crimson Text', serif;
+  border-top: 1px solid #E0E0E0;
+  text-align: center;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.footer p,
+.footer div {
+  margin: 0;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: clamp(10px, 1.5vw, 16px) clamp(10px, 1.5vw, 16px) clamp(12px, 1.5vw, 18px);
+    font-size: clamp(10px, 1.3vw, 12px);
+    gap: clamp(3px, 0.8vw, 4px);
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: clamp(8px, 1vw, 12px) clamp(8px, 1vw, 12px);
+    font-size: clamp(9px, 1.2vw, 10px);
+  }
 }
