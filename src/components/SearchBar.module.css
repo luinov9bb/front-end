@@ -10,16 +10,16 @@
 .searchInput {
   width: 100%;
   max-width: 480px;
-  padding: clamp(8px, 1.5vw, 10px) clamp(10px, 1.5vw, 14px);
+  padding: clamp(12px, 2vw, 16px) clamp(14px, 2.2vw, 20px);
   border-radius: 999px;
   border: 1px solid #E0E0E0;
   background: #F0F0F0;
-  font-size: clamp(12px, 1.5vw, 14px);
+  font-size: clamp(16px, 1.8vw, 18px);
   font-family: 'Crimson Text', serif;
   outline: none;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease, background 0.2s ease;
-  min-height: 40px;
+  min-height: 52px;
 }
 
 .searchInput::placeholder {
@@ -35,18 +35,19 @@
 
 @media (max-width: 768px) {
   .searchInput {
-    padding: clamp(6px, 1vw, 8px) clamp(8px, 1.2vw, 12px);
-    font-size: clamp(11px, 1.3vw, 13px);
+    padding: clamp(10px, 1.5vw, 14px) clamp(12px, 1.8vw, 16px);
+    font-size: clamp(14px, 1.6vw, 16px);
   }
 }
 
 @media (max-width: 480px) {
   .searchSection {
-    padding: clamp(3px, 0.8vw, 6px) 0;
+    padding: clamp(6px, 1.2vw, 10px) 0;
   }
 
   .searchInput {
     max-width: 100%;
-    padding: clamp(6px, 1vw, 8px) clamp(8px, 1.2vw, 10px);
+    padding: clamp(10px, 1.5vw, 14px) clamp(12px, 1.8vw, 16px);
+    font-size: clamp(14px, 1.5vw, 16px);
   }
 }

@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: clamp(6px, 1vw, 10px);
+  gap: clamp(12px, 1.5vw, 18px);
   background: #FAFAF8;
   border-radius: 0;
   box-shadow: none;
@@ -12,28 +12,31 @@
 }
 
 .title {
-  margin: 0 0 clamp(8px, 1.5vw, 12px);
-  font-size: clamp(13px, 1.5vw, 1rem);
+  margin: 0 0 clamp(12px, 2vw, 16px);
+  font-size: clamp(18px, 2vw, 22px);
   font-weight: 700;
   color: #333333;
   font-family: 'Crimson Text', serif;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
 }
 
 .section button {
   margin: 0;
   width: 100%;
-  padding: clamp(8px, 1.5vw, 12px) clamp(12px, 2vw, 16px);
+  padding: clamp(12px, 1.8vw, 16px) clamp(12px, 2vw, 16px);
   background: transparent;
   border: none;
   border-radius: 0;
   border-bottom: 1px solid #E5E5E0;
   color: #333333;
   text-align: left;
-  font-size: clamp(12px, 1.3vw, 14px);
+  font-size: clamp(16px, 1.6vw, 18px);
   cursor: pointer;
   font-family: 'Crimson Text', serif;
   transition: background 0.2s ease, color 0.2s ease;
-  min-height: 40px;
+  min-height: 44px;
+  font-weight: 500;
 }
 
 .section button:hover {

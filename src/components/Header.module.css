@@ -31,16 +31,16 @@ header {
 
 .searchInput {
   width: 100%;
-  padding: clamp(8px, 1vw, 10px) clamp(10px, 1.5vw, 14px);
+  padding: clamp(12px, 1.5vw, 16px) clamp(16px, 2vw, 20px);
   border-radius: 999px;
   border: 1px solid #E0E0E0;
   background: #F8F8F8;
   color: #333333;
-  font-size: clamp(12px, 1.5vw, 14px);
+  font-size: clamp(16px, 1.8vw, 18px);
   font-family: 'Crimson Text', serif;
   outline: none;
   transition: background 0.2s, border-color 0.2s;
-  min-height: 44px;
+  min-height: 52px;
 }
 
 .searchInput:focus {
@@ -69,17 +69,19 @@ nav a {
   margin-left: 0;
   color: #FFFFFF;
   text-decoration: none;
-  font-size: clamp(12px, 1.5vw, 14px);
-  font-weight: 500;
+  font-size: clamp(14px, 1.6vw, 16px);
+  font-weight: 700;
   font-family: 'Crimson Text', serif;
-  padding: clamp(6px, 1vw, 8px) clamp(12px, 1.5vw, 16px);
+  padding: clamp(8px, 1.2vw, 12px) clamp(14px, 2vw, 18px);
   background: #666666;
   border-radius: 999px;
   transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
   white-space: nowrap;
-  min-height: 40px;
+  min-height: 44px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 nav a:hover {
@@ -92,19 +94,21 @@ nav a:hover {
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: clamp(4px, 1vw, 8px);
-  padding: clamp(6px, 1vw, 8px) clamp(8px, 1.5vw, 12px);
+  gap: clamp(6px, 1.2vw, 10px);
+  padding: clamp(8px, 1.2vw, 12px) clamp(12px, 1.8vw, 16px);
   border-radius: 999px;
   border: 1px solid #E0E0E0;
   background: #F0F0F0;
   color: #333333;
   cursor: pointer;
-  font-size: clamp(12px, 1.5vw, 14px);
+  font-size: clamp(14px, 1.5vw, 16px);
   font-family: 'Crimson Text', serif;
   white-space: nowrap;
   transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease;
   min-height: 44px;
-  font-weight: 500;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
 }
 
 .cartButton:hover {
@@ -194,13 +198,15 @@ nav a:hover {
 }
 
 .mobileMenu a {
-  padding: clamp(12px, 3vw, 16px) clamp(16px, 3vw, 24px);
+  padding: clamp(14px, 3.5vw, 20px) clamp(16px, 3vw, 24px);
   color: #333333;
   text-decoration: none;
-  font-size: clamp(14px, 2vw, 16px);
-  font-weight: 500;
+  font-size: clamp(16px, 2.2vw, 18px);
+  font-weight: 600;
   border-bottom: 1px solid #F0F0F0;
   transition: background 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
 }
 
 .mobileMenu a:hover,
@@ -218,20 +224,22 @@ nav a:hover {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: clamp(12px, 3vw, 16px) clamp(16px, 3vw, 24px);
+  gap: 12px;
+  padding: clamp(14px, 3.5vw, 20px) clamp(16px, 3vw, 24px);
   background: transparent;
   border: none;
   border-bottom: 1px solid #F0F0F0;
   color: #333333;
   cursor: pointer;
-  font-size: clamp(14px, 2vw, 16px);
-  font-weight: 500;
+  font-size: clamp(16px, 2.2vw, 18px);
+  font-weight: 600;
   font-family: 'Crimson Text', serif;
   text-align: left;
   transition: background 0.2s ease;
   width: 100%;
   justify-content: flex-start;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
 }
 
 .mobileCartButton:hover {
