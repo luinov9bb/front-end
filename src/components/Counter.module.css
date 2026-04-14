@@ -1,1 +1,9 @@
-/* Counter component styles can be added here if needed */
+p {
+  margin: 0;
+  padding: 0 0 clamp(12px, 2vw, 16px) 0;
+  font-size: clamp(16px, 1.8vw, 18px);
+  font-family: 'Crimson Text', serif;
+  font-weight: 600;
+  color: #333333;
+  letter-spacing: 0.5px;
+}

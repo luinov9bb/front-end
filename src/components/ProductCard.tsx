@@ -27,7 +27,7 @@ function ProductCard({product, isFavorite, onToggleFavorite}:ProductCardProps){
             <h3 className={styles.cardTitle} title={product.name}>{product.name}</h3>
             <p>{product.price} лей</p>
             <div className={styles.actions}>
-                <button type="button" onClick={()=>onToggleFavorite(product.id)}>
+                <button type="button" onClick={()=>onToggleFavorite(product.id)} className={styles.favoriteBtn}>
                   {isFavorite ? "В избранном" : "В избранное"}
                 </button>
                 <button type="button" onClick={handleAddToCart} className={styles.cartBtn}>

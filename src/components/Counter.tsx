@@ -1,10 +1,12 @@
+import styles from "./Counter.module.css";
+
 type CounterProps={
   count:number;
 }
 
 function Counter({count}:CounterProps){
   return (
-      <p>Найденные книги: {count}</p>
+      <p className={styles.p}>Найденные книги: {count}</p>
   )
 }
 
