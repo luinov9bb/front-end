@@ -7,17 +7,17 @@ function Home() {
   const carouselSlides = [
     {
       id: 1,
-      image: "https://www.mirf.ru/backend/wp-content/uploads/2018/05/5e63e0242e67a2340a2f7d098d4ca2c2.jpg",
+      image: "https://picsum.photos/1200/600?random=1",
       title: "Книги по литературе",
     },
     {
       id: 2,
-      image: "https://main-cdn.sbermegamarket.ru/big1/hlr-system/1628137/100001820150b0.jpg",
+      image: "https://picsum.photos/1200/600?random=2",
       title: "Популярные издания",
     },
     {
       id: 3,
-      image: "https://ir.ozone.ru/s3/multimedia-1-7/c1000/6915613975.jpg",
+      image: "https://picsum.photos/1200/600?random=3",
       title: "Лучшие бестселлеры",
     },
   ];
