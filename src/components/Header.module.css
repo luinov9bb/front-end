@@ -13,6 +13,18 @@ header {
   flex-wrap: wrap;
 }
 
+.brand {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.brand:hover {
+  transform: scale(1.05);
+}
+
 .brand h1 {
   margin: 0;
   font-size: clamp(1rem, 2.5vw, 1.35rem);

@@ -2,31 +2,30 @@ import { Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import "./App.css"
 
-import Header from "./components/Header"
-import Footer from "./components/Footer"
+import Layout from "./components/Layout"
 import Home from "./pages/Home"
 import Catalog from "./pages/Catalog"
 import Cart from "./pages/Cart"
-import { useFavorites } from "./context/FavoritesContext"
-import { useCart } from "./context/CartContext"
+import Login from "./pages/Login"
+import Profile from "./pages/Profile"
+import Favorites from "./pages/Favorites"
+import Contacts from "./pages/Contacts"
 
 function App(){
-    const { favoriteIds } = useFavorites();
-    const { totalItems } = useCart();
     const [search, setSearch] = useState("");
 
     return(
-        <div className="app">
-            <Header favoritesCount={favoriteIds.size} cartCount={totalItems} search={search} setSearch={setSearch} />
-            <main className="appMain">
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/catalog" element={<Catalog search={search} setSearch={setSearch} />} />
-                    <Route path="/cart" element={<Cart />} />
-                </Routes>
-            </main>
-            <Footer />
-        </div>
+        <Routes>
+            <Route element={<Layout search={search} setSearch={setSearch} />}>
+                <Route path="/" element={<Home />} />
+                <Route path="/catalog" element={<Catalog search={search} setSearch={setSearch} />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/favorites" element={<Favorites />} />
+                <Route path="/contacts" element={<Contacts />} />
+            </Route>
+        </Routes>
     )
 }
 

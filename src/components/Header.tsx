@@ -25,9 +25,9 @@ function Header({ favoritesCount, cartCount, search, setSearch }: HeaderProps) {
 
   return (
     <header className={styles.header}>
-      <div className={styles.brand}>
+      <Link to="/" className={styles.brand} onClick={closeMobileMenu}>
         <h1>BookStore</h1>
-      </div>
+      </Link>
 
       <div className={styles.searchBox}>
         <input
@@ -57,7 +57,7 @@ function Header({ favoritesCount, cartCount, search, setSearch }: HeaderProps) {
         <nav>
           <Link to="/">Home</Link>
           <Link to="/catalog">Catalog</Link>
-          <a href="#">Contacts</a>
+          <Link to="/contacts">Contacts</Link>
         </nav>
 
         <button className={styles.cartButton} type="button" aria-label="Избранное" onClick={() => navigate("/favorites")}>
@@ -85,7 +85,7 @@ function Header({ favoritesCount, cartCount, search, setSearch }: HeaderProps) {
       <nav className={`${styles.mobileMenu} ${mobileMenuOpen ? styles.open : ''}`}>
         <Link to="/" onClick={closeMobileMenu}>Home</Link>
         <Link to="/catalog" onClick={closeMobileMenu}>Catalog</Link>
-        <a href="#" onClick={closeMobileMenu}>Contacts</a>
+        <Link to="/contacts" onClick={closeMobileMenu}>Contacts</Link>
         
         <div className={styles.mobileDivider}></div>
         
