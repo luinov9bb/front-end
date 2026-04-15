@@ -1,9 +1,9 @@
 .features {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: clamp(16px, 3vw, 24px);
-  padding: clamp(24px, 5vw, 40px) clamp(16px, 3vw, 32px);
-  max-width: 1400px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(40px, 6vw, 60px);
+  padding: clamp(80px, 10vw, 140px) clamp(20px, 4vw, 40px);
+  max-width: 1200px;
   margin: 0 auto;
   background: #D8D8D8;
   width: 100%;
@@ -14,96 +14,97 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  background: #F0F0F0;
-  padding: clamp(20px, 3vw, 32px) clamp(16px, 2vw, 24px);
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  border: 1px solid #E8E8E8;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  transition: none;
+  border: none;
 }
 
 .featureCard:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  transform: none;
+  box-shadow: none;
 }
 
 .icon {
-  font-size: clamp(36px, 6vw, 48px);
-  margin-bottom: clamp(12px, 2vw, 16px);
+  font-size: clamp(32px, 5vw, 42px);
+  margin-bottom: clamp(20px, 3vw, 32px);
   display: flex;
   align-items: center;
   justify-content: center;
   height: auto;
+  opacity: 0.85;
 }
 
 .featureCard h3 {
-  font-size: clamp(16px, 2.5vw, 18px);
-  margin: 0 0 clamp(8px, 1.5vw, 12px);
+  font-size: clamp(0.65rem, 1vw, 0.75rem);
+  margin: 0 0 clamp(8px, 1.5vw, 12px) 0;
   color: #333;
-  font-weight: 600;
-  font-family: 'Crimson Text', serif;
+  font-weight: 700;
+  font-family: 'Segoe UI', -apple-system, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  line-height: 1.4;
 }
 
 .featureCard p {
   margin: 0;
   color: #666;
-  font-size: clamp(13px, 1.5vw, 14px);
+  font-size: clamp(0.8rem, 1.2vw, 0.9rem);
   line-height: 1.6;
-  font-family: 'Crimson Text', serif;
+  font-family: 'Segoe UI', -apple-system, sans-serif;
+  font-weight: 400;
 }
 
 @media (max-width: 900px) {
   .features {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(30px, 5vw, 50px);
+    padding: clamp(60px, 8vw, 100px) clamp(16px, 3vw, 32px);
   }
 }
 
 @media (max-width: 768px) {
   .features {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: clamp(12px, 2vw, 16px);
-    padding: clamp(16px, 3vw, 24px) clamp(12px, 2vw, 16px);
-  }
-
-  .featureCard {
-    padding: clamp(16px, 2.5vw, 24px) clamp(12px, 2vw, 16px);
+    grid-template-columns: 1fr;
+    gap: clamp(24px, 4vw, 40px);
+    padding: clamp(48px, 7vw, 80px) clamp(16px, 3vw, 24px);
   }
 
   .icon {
-    font-size: clamp(32px, 5vw, 40px);
-    margin-bottom: clamp(8px, 1.5vw, 12px);
+    font-size: clamp(28px, 4vw, 36px);
+    margin-bottom: clamp(16px, 2.5vw, 24px);
   }
 
   .featureCard h3 {
-    font-size: clamp(14px, 2vw, 16px);
+    font-size: clamp(0.6rem, 0.9vw, 0.7rem);
+    letter-spacing: 1.2px;
   }
 
   .featureCard p {
-    font-size: clamp(12px, 1.3vw, 13px);
+    font-size: clamp(0.75rem, 1vw, 0.85rem);
   }
 }
 
 @media (max-width: 480px) {
   .features {
     grid-template-columns: 1fr;
-    gap: clamp(8px, 1.5vw, 12px);
-    padding: clamp(12px, 2vw, 16px);
-  }
-
-  .featureCard {
-    padding: clamp(12px, 2vw, 16px);
+    gap: clamp(20px, 3vw, 32px);
+    padding: clamp(32px, 5vw, 48px) clamp(12px, 2vw, 16px);
   }
 
   .icon {
-    font-size: clamp(28px, 4vw, 32px);
-    margin-bottom: 8px;
+    font-size: clamp(24px, 3.5vw, 32px);
+    margin-bottom: clamp(12px, 2vw, 20px);
   }
 
   .featureCard h3 {
-    font-size: clamp(13px, 1.8vw, 14px);
+    font-size: clamp(0.55rem, 0.8vw, 0.65rem);
+    letter-spacing: 1px;
   }
 
   .featureCard p {
-    font-size: clamp(11px, 1.2vw, 12px);
+    font-size: clamp(0.7rem, 0.9vw, 0.8rem);
   }
 }

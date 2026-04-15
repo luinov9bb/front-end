@@ -4,21 +4,21 @@ function Features() {
   return (
     <section className={styles.features}>
       <div className={styles.featureCard}>
-        <div className={styles.icon}>🚚</div>
+        <div className={styles.icon}>📦</div>
         <h3>Быстрая доставка</h3>
-        <p>Доставляем заказы по всей стране в кратчайшие сроки с надежными курьерскими сервисами</p>
+        <p>Доставляем заказы по всей стране в кратчайшие сроки</p>
       </div>
 
       <div className={styles.featureCard}>
         <div className={styles.icon}>📚</div>
         <h3>Большой ассортимент</h3>
-        <p>Огромный выбор книг по всем жанрам: от классической литературы до современных бестселлеров</p>
+        <p>Огромный выбор книг по всем жанрам</p>
       </div>
 
       <div className={styles.featureCard}>
-        <div className={styles.icon}>💰</div>
-        <h3>Доступные цены</h3>
-        <p>Выгодные цены и постоянные скидки делают качественные книги доступными для всех</p>
+        <div className={styles.icon}>✓</div>
+        <h3>Гарантия качества</h3>
+        <p>Все книги проверены нашей командой экспертов</p>
       </div>
     </section>
   );
