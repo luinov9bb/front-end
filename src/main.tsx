@@ -5,6 +5,7 @@ import './index.css'
 import App from './App.tsx'
 import { FavoritesProvider } from './context/FavoritesContext'
 import { CartProvider } from './context/CartContext'
+import { AuthProvider } from './context/AuthContext'
 import { initializeDB } from './mock/mockDB'
 
 // Initialize mock database on app startup
@@ -13,11 +14,13 @@ initializeDB()
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
-      <FavoritesProvider>
-        <CartProvider>
-          <App />
-        </CartProvider>
-      </FavoritesProvider>
+      <AuthProvider>
+        <FavoritesProvider>
+          <CartProvider>
+            <App />
+          </CartProvider>
+        </FavoritesProvider>
+      </AuthProvider>
     </BrowserRouter>
   </StrictMode>,
 )

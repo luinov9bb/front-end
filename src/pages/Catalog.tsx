@@ -7,12 +7,8 @@ import { useFavorites } from "../context/FavoritesContext";
 import stateMessageStyles from "../pages/StateMessage.module.css";
 import styles from "./Catalog.module.css";
 
-type CatalogProps = {
-  search: string;
-  setSearch: (value: string) => void;
-};
-
-function Catalog({ search, setSearch }: CatalogProps) {
+function Catalog() {
+  const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -76,6 +72,17 @@ function Catalog({ search, setSearch }: CatalogProps) {
 
   return (
     <>
+      <div className={styles.searchContainer}>
+        <input
+          className={styles.searchInput}
+          type="text"
+          placeholder="Поиск книг..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          aria-label="Поиск книг"
+        />
+      </div>
+
       <div className={styles.catalogRow}>
         <aside className={styles.sidebar}>
           <FilterButtons setCategory={setCategory} />

@@ -1,26 +1,26 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
 import styles from "./Header.module.css";
 
 type HeaderProps = {
   favoritesCount: number;
   cartCount: number;
-  search: string;
-  setSearch: (value: string) => void;
 }
 
-function Header({ favoritesCount, cartCount, search, setSearch }: HeaderProps) {
+function Header({ favoritesCount, cartCount }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { currentUser, isAuthenticated, isAdmin, logout } = useAuth();
   const badgeText = favoritesCount > 99 ? "99+" : String(favoritesCount);
   const cartBadgeText = cartCount > 99 ? "99+" : String(cartCount);
   const navigate = useNavigate();
 
   const closeMobileMenu = () => setMobileMenuOpen(false);
 
-  const handleSearch = (value: string) => {
-    setSearch(value);
-    navigate("/catalog");
+  const handleLogout = () => {
+    logout();
     closeMobileMenu();
+    navigate("/");
   };
 
   return (
@@ -28,17 +28,6 @@ function Header({ favoritesCount, cartCount, search, setSearch }: HeaderProps) {
       <Link to="/" className={styles.brand} onClick={closeMobileMenu}>
         <h1>BookStore</h1>
       </Link>
-
-      <div className={styles.searchBox}>
-        <input
-          className={styles.searchInput}
-          type="text"
-          placeholder="Поиск книг..."
-          value={search}
-          onChange={(e) => handleSearch(e.target.value)}
-          aria-label="Поиск книг"
-        />
-      </div>
 
       {/* Hamburger menu button */}
       <button 
@@ -58,6 +47,9 @@ function Header({ favoritesCount, cartCount, search, setSearch }: HeaderProps) {
           <Link to="/">Home</Link>
           <Link to="/catalog">Catalog</Link>
           <Link to="/contacts">Contacts</Link>
+          {isAdmin && (
+            <Link to="/admin">Админ-панель</Link>
+          )}
         </nav>
 
         <button className={styles.cartButton} type="button" aria-label="Избранное" onClick={() => navigate("/favorites")}>
@@ -79,6 +71,29 @@ function Header({ favoritesCount, cartCount, search, setSearch }: HeaderProps) {
             </span>
           )}
         </Link>
+
+        {isAuthenticated && currentUser ? (
+          <div className={styles.userSection}>
+            <span className={styles.username}>{currentUser.username}</span>
+            <button 
+              className={styles.logoutButton}
+              onClick={handleLogout}
+              type="button"
+              aria-label="Выйти"
+            >
+              Выйти
+            </button>
+          </div>
+        ) : (
+          <div className={styles.authButtons}>
+            <Link to="/login" className={styles.loginButton}>
+              Вход
+            </Link>
+            <Link to="/register" className={styles.registerButton}>
+              Регистрация
+            </Link>
+          </div>
+        )}
       </div>
 
       {/* Mobile Menu */}
@@ -86,6 +101,9 @@ function Header({ favoritesCount, cartCount, search, setSearch }: HeaderProps) {
         <Link to="/" onClick={closeMobileMenu}>Home</Link>
         <Link to="/catalog" onClick={closeMobileMenu}>Catalog</Link>
         <Link to="/contacts" onClick={closeMobileMenu}>Contacts</Link>
+        {isAdmin && (
+          <Link to="/admin" onClick={closeMobileMenu}>Админ-панель</Link>
+        )}
         
         <div className={styles.mobileDivider}></div>
         
@@ -117,6 +135,39 @@ function Header({ favoritesCount, cartCount, search, setSearch }: HeaderProps) {
             <span className={styles.cartBadge}>{cartBadgeText}</span>
           )}
         </Link>
+
+        <div className={styles.mobileDivider}></div>
+
+        {isAuthenticated && currentUser ? (
+          <div className={styles.mobileUserSection}>
+            <span className={styles.mobileUsername}>{currentUser.username}</span>
+            <button 
+              className={styles.mobileLogoutButton}
+              onClick={handleLogout}
+              type="button"
+              aria-label="Выйти"
+            >
+              Выйти
+            </button>
+          </div>
+        ) : (
+          <div className={styles.mobileAuthButtons}>
+            <Link 
+              to="/login" 
+              className={styles.mobileAuthLink}
+              onClick={closeMobileMenu}
+            >
+              Вход
+            </Link>
+            <Link 
+              to="/register" 
+              className={styles.mobileAuthLink}
+              onClick={closeMobileMenu}
+            >
+              Регистрация
+            </Link>
+          </div>
+        )}
       </nav>
     </header>
   )

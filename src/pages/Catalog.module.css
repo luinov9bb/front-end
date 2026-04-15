@@ -1,3 +1,35 @@
+.searchContainer {
+  padding: clamp(16px, 3vw, 24px);
+  background: #FFFFFF;
+  border-bottom: 1px solid #E0E0E0;
+  display: flex;
+  justify-content: center;
+}
+
+.searchInput {
+  width: 100%;
+  max-width: 600px;
+  padding: clamp(12px, 1.5vw, 16px) clamp(16px, 2vw, 20px);
+  border-radius: 999px;
+  border: 1px solid #E0E0E0;
+  background: #F8F8F8;
+  color: #333333;
+  font-size: clamp(16px, 1.8vw, 18px);
+  font-family: 'Crimson Text', serif;
+  outline: none;
+  transition: background 0.2s, border-color 0.2s;
+  min-height: 44px;
+}
+
+.searchInput:focus {
+  background: #FFFFFF;
+  border-color: #8B3A3A;
+}
+
+.searchInput::placeholder {
+  color: #999999;
+}
+
 .catalogRow {
   display: flex;
   align-items: flex-start;

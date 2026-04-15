@@ -100,52 +100,21 @@ input:disabled {
   cursor: not-allowed;
 }
 
-.testCredentials {
-  background: #f9f9f9;
-  padding: 16px;
-  border-radius: 8px;
-  margin-top: 24px;
-  border-left: 4px solid #8B3A3A;
-}
-
-.testCredentials p {
-  margin: 0 0 12px 0;
-  font-weight: 600;
-  color: #333;
-  font-size: 0.95rem;
-}
-
-.testCredentials ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.testCredentials li {
-  padding: 6px 0;
-  color: #555;
-  font-size: 0.9rem;
-}
-
-.testCredentials strong {
-  color: #333;
-}
-
-.registerLink {
+.loginLink {
   text-align: center;
   margin-top: 20px;
   color: #666;
   font-size: 0.95rem;
 }
 
-.registerLink a {
+.loginLink a {
   color: #8B3A3A;
   text-decoration: none;
   font-weight: 600;
   transition: color 0.2s;
 }
 
-.registerLink a:hover {
+.loginLink a:hover {
   color: #7a3333;
   text-decoration: underline;
 }
@@ -157,10 +126,5 @@ input:disabled {
 
   h1 {
     font-size: 1.5rem;
-  }
-
-  .testCredentials {
-    padding: 12px;
-    font-size: 0.85rem;
   }
 }
