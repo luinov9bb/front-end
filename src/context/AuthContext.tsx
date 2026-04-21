@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
 import type { User } from "../mock/mockDB";
-import { findUserByUsername, findUserById, addUser, getUsers } from "../mock/mockDB";
+import { findUserByUsername, addUser, getUsers } from "../mock/mockDB";
 
 type AuthUser = Omit<User, "password">;
 

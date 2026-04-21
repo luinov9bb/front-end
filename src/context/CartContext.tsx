@@ -1,8 +1,9 @@
 import { createContext, useContext, useState } from "react";
 import type { ReactNode } from "react";
+import type { BookId } from "../mock/mockDB";
 
 export type CartItem = {
-  id: number;
+  id: BookId;
   name: string;
   price: number;
   image: string;
@@ -12,8 +13,8 @@ export type CartItem = {
 type CartContextType = {
   cartItems: CartItem[];
   addToCart: (product: CartItem) => void;
-  removeFromCart: (productId: number) => void;
-  updateQuantity: (productId: number, quantity: number) => void;
+  removeFromCart: (productId: BookId) => void;
+  updateQuantity: (productId: BookId, quantity: number) => void;
   clearCart: () => void;
   totalPrice: number;
   totalItems: number;
@@ -26,10 +27,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const addToCart = (product: CartItem) => {
     setCartItems((prev) => {
-      const existing = prev.find((item) => item.id === product.id);
+      const existing = prev.find((item) => String(item.id) === String(product.id));
       if (existing) {
         return prev.map((item) =>
-          item.id === product.id
+          String(item.id) === String(product.id)
             ? { ...item, quantity: item.quantity + product.quantity }
             : item
         );
@@ -38,18 +39,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
     });
   };
 
-  const removeFromCart = (productId: number) => {
-    setCartItems((prev) => prev.filter((item) => item.id !== productId));
+  const removeFromCart = (productId: BookId) => {
+    setCartItems((prev) =>
+      prev.filter((item) => String(item.id) !== String(productId))
+    );
   };
 
-  const updateQuantity = (productId: number, quantity: number) => {
+  const updateQuantity = (productId: BookId, quantity: number) => {
     if (quantity <= 0) {
       removeFromCart(productId);
       return;
     }
     setCartItems((prev) =>
       prev.map((item) =>
-        item.id === productId ? { ...item, quantity } : item
+        String(item.id) === String(productId) ? { ...item, quantity } : item
       )
     );
   };
@@ -59,7 +62,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const totalPrice = cartItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
 
   return (
     <CartContext.Provider

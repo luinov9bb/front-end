@@ -1,26 +1,28 @@
-import type { Product } from "../data/products"
-import ProductCard from "./ProductCard"
-import styles from "./ProductList.module.css"
+import type { Book, BookId } from "../mock/mockDB";
+import ProductCard from "./ProductCard";
+import styles from "./ProductList.module.css";
 
-type ProductListProps={
-    products: Product[];
-    favoriteIds: Set<number>;
-    onToggleFavorite: (productId: number) => void;
+type ProductListProps = {
+  products: Book[];
+  favoriteIds: Set<BookId>;
+  onToggleFavorite: (productId: BookId) => void;
+};
+
+function ProductList({ products, favoriteIds, onToggleFavorite }: ProductListProps) {
+  return (
+    <section className={styles.grid}>
+      {products.map((product) => (
+        <ProductCard
+          key={String(product.id)}
+          product={product}
+          isFavorite={Array.from(favoriteIds).some(
+            (favoriteId) => String(favoriteId) === String(product.id)
+          )}
+          onToggleFavorite={onToggleFavorite}
+        />
+      ))}
+    </section>
+  );
 }
 
-function ProductList({products, favoriteIds, onToggleFavorite}:ProductListProps){
-    return(
-        <section className={styles.grid}>
-            {products.map((p)=>(
-              <ProductCard
-                key={p.id}
-                product={p}
-                isFavorite={favoriteIds.has(p.id)}
-                onToggleFavorite={onToggleFavorite}
-              />
-            ))}
-        </section>
-    )
-}
-
-export default ProductList
+export default ProductList;

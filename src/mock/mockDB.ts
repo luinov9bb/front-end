@@ -1,23 +1,20 @@
-// TypeScript Interfaces
-
-export type BookCategory = 'programming' | 'fiction' | 'western' | 'finance' | 'roman';
+export type BookId = string | number;
 
 export interface Book {
-  id: number;
-  name: string;
-  price: number;
-  category: BookCategory;
-  image: string;
-  description: string;
+  id: BookId;
+  title: string;
   author: string;
-  rating: number;
-  reviews_count: number;
-  in_stock: number;
+  genre: string;
+  price: number;
+  year: number;
+  pages: number;
+  annotation: string;
+  coverImage: string;
 }
 
 export interface Review {
   id: number;
-  book_id: number;
+  book_id: BookId;
   user_id: number;
   user_name: string;
   rating: number;
@@ -28,9 +25,9 @@ export interface Review {
 export interface Order {
   id: number;
   user_id: number;
-  book_ids: number[];
+  book_ids: BookId[];
   total_price: number;
-  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
   created_at: string;
   updated_at: string;
 }
@@ -40,89 +37,78 @@ export interface User {
   username: string;
   email: string;
   password: string;
-  role: 'admin' | 'user';
+  role: "admin" | "user";
   created_at: string;
   updated_at: string;
 }
 
-// Mock Books Data
-
 export const mockBooks: Book[] = [
   {
     id: 1,
-    name: "Мастер и Маргарита",
-    price: 800,
-    category: "roman",
-    image: "https://picsum.photos/200?1",
-    author: "Михаил Булгаков",
-    description: "Классический роман о любви, творчестве и борьбе со сложностью мира. История переплетает две линии: действия в советской Москве 1930-х годов и истории Понтия Пилата и Иешуа из далеких времен.",
-    rating: 4.9,
-    reviews_count: 342,
-    in_stock: 15,
+    title: "Мастер и Маргарита",
+    author: "Булгаков М.А.",
+    genre: "Классика",
+    price: 389,
+    year: 2024,
+    pages: 480,
+    annotation:
+      "«Мастер и Маргарита» М.А. Булгакова — культовый многоуровневый роман, сочетающий сатиру, мистику и философию. В центре сюжета — визит сатаны (Воланда) в советскую Москву 1930-х, история любви Мастера и Маргариты, а также библейская драма Понтия Пилата и Иешуа. Произведение исследует темы добра и зла, творческой свободы и нравственного выбора. «Мастер и Маргарита» — загадочное произведение, которое, несмотря на запреты в советское время, стало одним из самых популярных романов XX века.",
+    coverImage:
+      "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=900&q=80",
   },
   {
     id: 2,
-    name: "Чистый код",
-    price: 1200,
-    category: "programming",
-    image: "https://picsum.photos/200?2",
+    title: "Чистый код",
     author: "Роберт Мартин",
-    description: "Практическое руководство по написанию качественного кода. Книга раскрывает лучшие практики программирования, от именования переменных до архитектуры систем. Незаменимый справочник для разработчиков.",
-    rating: 4.7,
-    reviews_count: 156,
-    in_stock: 8,
+    genre: "Программирование",
+    price: 640,
+    year: 2008,
+    pages: 464,
+    annotation:
+      "Практическая книга о том, как писать понятный, поддерживаемый и профессиональный код. Подходит разработчикам, которые хотят улучшить архитектурное мышление и рабочие привычки.",
+    coverImage:
+      "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=900&q=80",
   },
   {
     id: 3,
-    name: "Властелин Колец",
-    price: 1500,
-    category: "fiction",
-    image: "https://cdn.librarius.md/img/original/vlastelin-kolec_1486810851.jpg",
-    author: "Джон Толкиен",
-    description: "Эпическое фэнтези о борьбе добра и зла, героических путешествиях и дружбе. История хоббита Фродо и его приключениях в мире Средиземья покорила сердца миллионов читателей.",
-    rating: 4.8,
-    reviews_count: 512,
-    in_stock: 12,
+    title: "Властелин колец",
+    author: "Джон Р. Р. Толкин",
+    genre: "Фэнтези",
+    price: 720,
+    year: 1954,
+    pages: 1216,
+    annotation:
+      "Эпическое путешествие по Средиземью, где дружба, мужество и жертва становятся главной силой в борьбе со злом. Книга, определившая жанр высокого фэнтези на десятилетия вперёд.",
+    coverImage:
+      "https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=900&q=80",
   },
   {
     id: 4,
-    name: "React для новичков",
-    price: 950,
-    category: "programming",
-    image: "https://picsum.photos/200?3",
-    author: "Алекс Бэнкс, Ева Порцелло",
-    description: "Введение в React для начинающих разработчиков. Пошаговое руководство от установки до создания полнофункциональных приложений. Включает практические примеры и ошибки, которых стоит избежать.",
-    rating: 4.6,
-    reviews_count: 98,
-    in_stock: 20,
+    title: "Думай медленно... решай быстро",
+    author: "Даниэль Канеман",
+    genre: "Психология",
+    price: 560,
+    year: 2011,
+    pages: 656,
+    annotation:
+      "Исследование того, как устроено человеческое мышление: интуитивное, быстрое и эмоциональное с одной стороны, и медленное, аналитическое с другой. Полезна для работы, бизнеса и повседневных решений.",
+    coverImage:
+      "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?auto=format&fit=crop&w=900&q=80",
   },
   {
     id: 5,
-    name: "Кровавый Меридиан",
-    price: 500,
-    category: "western",
-    image: "https://picsum.photos/200?4",
-    author: "Кормак Маккарти",
-    description: "Жестокий и поэтичный вестерн о путешествии охотников на скальпы через Техас и Мексику в XIX веке. Темная, философская работа о природе насилия и человеческой морали.",
-    rating: 4.3,
-    reviews_count: 87,
-    in_stock: 6,
-  },
-  {
-    id: 6,
-    name: "Самый богатый человек в Вавилоне",
-    price: 290,
-    category: "finance",
-    image: "https://picsum.photos/200?5",
-    author: "Джордж Клейсон",
-    description: "Классическое руководство по финансовой грамотности в форме вавилонских притч. Простые и мудрые советы о накоплении богатства, инвестировании и управлении деньгами, применимые и в современном мире.",
-    rating: 4.5,
-    reviews_count: 234,
-    in_stock: 25,
+    title: "Самый богатый человек в Вавилоне",
+    author: "Джордж Сэмюэль Клейсон",
+    genre: "Финансы",
+    price: 295,
+    year: 1926,
+    pages: 224,
+    annotation:
+      "Классика финансовой грамотности в форме коротких притч. Простые принципы накопления, дисциплины и разумного обращения с деньгами изложены легко и по делу.",
+    coverImage:
+      "https://images.unsplash.com/photo-1511108690759-009324a90311?auto=format&fit=crop&w=900&q=80",
   },
 ];
-
-// Mock Users Data
 
 export const mockUsers: User[] = [
   {
@@ -145,8 +131,6 @@ export const mockUsers: User[] = [
   },
 ];
 
-// Mock Reviews Data
-
 export const mockReviews: Review[] = [
   {
     id: 1,
@@ -154,7 +138,7 @@ export const mockReviews: Review[] = [
     user_id: 2,
     user_name: "John Doe",
     rating: 5,
-    comment: "Шедевр русской литературы! Невозможно оторваться от чтения.",
+    comment: "Одна из тех книг, к которым хочется возвращаться снова.",
     created_at: new Date("2024-02-01").toISOString(),
   },
   {
@@ -163,58 +147,121 @@ export const mockReviews: Review[] = [
     user_id: 2,
     user_name: "John Doe",
     rating: 4,
-    comment: "Полезная книга для любого разработчика. Рекомендую!",
+    comment: "Очень полезная книга для тех, кто хочет писать чище и понятнее.",
     created_at: new Date("2024-02-05").toISOString(),
   },
 ];
-
-// Mock Orders Data
 
 export const mockOrders: Order[] = [
   {
     id: 1,
     user_id: 2,
     book_ids: [1, 2],
-    total_price: 2000,
+    total_price: 1029,
     status: "delivered",
     created_at: new Date("2024-02-10").toISOString(),
     updated_at: new Date("2024-02-15").toISOString(),
   },
 ];
 
-// LocalStorage Keys
-
 const STORAGE_KEYS = {
   BOOKS: "bookstore_books",
+  BOOKS_SNAPSHOT: "bookstore_books_snapshot",
   USERS: "bookstore_users",
   REVIEWS: "bookstore_reviews",
   ORDERS: "bookstore_orders",
   DB_INITIALIZED: "bookstore_db_initialized",
 };
 
-// Initialize Database in LocalStorage
+function getMockBooksSnapshot(): string {
+  return JSON.stringify(mockBooks);
+}
+
+function isBook(value: unknown): value is Book {
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+
+  const book = value as Record<string, unknown>;
+
+  return (
+    (typeof book.id === "number" || typeof book.id === "string") &&
+    typeof book.title === "string" &&
+    typeof book.author === "string" &&
+    typeof book.genre === "string" &&
+    typeof book.price === "number" &&
+    typeof book.year === "number" &&
+    typeof book.pages === "number" &&
+    typeof book.annotation === "string" &&
+    typeof book.coverImage === "string"
+  );
+}
+
+function hasValidStoredBooks(): boolean {
+  const rawBooks = localStorage.getItem(STORAGE_KEYS.BOOKS);
+  if (!rawBooks) {
+    return false;
+  }
+
+  try {
+    const parsed = JSON.parse(rawBooks);
+    return Array.isArray(parsed) && parsed.every(isBook);
+  } catch {
+    return false;
+  }
+}
+
+function getNextBookNumericId(books: Book[]): number {
+  const numericIds = books
+    .map((book) => (typeof book.id === "number" ? book.id : Number.NaN))
+    .filter((id) => !Number.isNaN(id));
+
+  return Math.max(0, ...numericIds) + 1;
+}
 
 export function initializeDB(): void {
-  // Check if DB is already initialized
-  if (localStorage.getItem(STORAGE_KEYS.DB_INITIALIZED)) {
+  const booksSnapshot = getMockBooksSnapshot();
+  const storedSnapshot = localStorage.getItem(STORAGE_KEYS.BOOKS_SNAPSHOT);
+  const shouldSeed =
+    !localStorage.getItem(STORAGE_KEYS.DB_INITIALIZED) ||
+    !hasValidStoredBooks() ||
+    storedSnapshot !== booksSnapshot;
+
+  if (!shouldSeed) {
     return;
   }
 
-  // Save all mock data to localStorage
-  localStorage.setItem(STORAGE_KEYS.BOOKS, JSON.stringify(mockBooks));
-  localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(mockUsers));
-  localStorage.setItem(STORAGE_KEYS.REVIEWS, JSON.stringify(mockReviews));
-  localStorage.setItem(STORAGE_KEYS.ORDERS, JSON.stringify(mockOrders));
+  localStorage.setItem(STORAGE_KEYS.BOOKS, booksSnapshot);
+  localStorage.setItem(STORAGE_KEYS.BOOKS_SNAPSHOT, booksSnapshot);
+
+  if (!localStorage.getItem(STORAGE_KEYS.USERS)) {
+    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(mockUsers));
+  }
+
+  if (!localStorage.getItem(STORAGE_KEYS.REVIEWS)) {
+    localStorage.setItem(STORAGE_KEYS.REVIEWS, JSON.stringify(mockReviews));
+  }
+
+  if (!localStorage.getItem(STORAGE_KEYS.ORDERS)) {
+    localStorage.setItem(STORAGE_KEYS.ORDERS, JSON.stringify(mockOrders));
+  }
+
   localStorage.setItem(STORAGE_KEYS.DB_INITIALIZED, "true");
-
-  console.log("✅ Mock database initialized successfully!");
 }
-
-// Get data from localStorage
 
 export function getBooks(): Book[] {
   const data = localStorage.getItem(STORAGE_KEYS.BOOKS);
-  return data ? JSON.parse(data) : [];
+
+  if (!data) {
+    return [...mockBooks];
+  }
+
+  try {
+    const parsed = JSON.parse(data);
+    return Array.isArray(parsed) && parsed.every(isBook) ? parsed : [...mockBooks];
+  } catch {
+    return [...mockBooks];
+  }
 }
 
 export function getUsers(): User[] {
@@ -232,11 +279,13 @@ export function getOrders(): Order[] {
   return data ? JSON.parse(data) : [];
 }
 
-// Add new item functions
-
 export function addBook(book: Book): void {
   const books = getBooks();
-  const newBook = { ...book, id: Math.max(...books.map((b) => b.id), 0) + 1 };
+  const newBook: Book = {
+    ...book,
+    id: typeof book.id === "undefined" ? getNextBookNumericId(books) : book.id,
+  };
+
   books.push(newBook);
   localStorage.setItem(STORAGE_KEYS.BOOKS, JSON.stringify(books));
 }
@@ -262,11 +311,9 @@ export function addOrder(order: Order): void {
   localStorage.setItem(STORAGE_KEYS.ORDERS, JSON.stringify(orders));
 }
 
-// Update functions
-
-export function updateBook(id: number, updates: Partial<Book>): void {
+export function updateBook(id: BookId, updates: Partial<Book>): void {
   const books = getBooks();
-  const index = books.findIndex((b) => b.id === id);
+  const index = books.findIndex((book) => String(book.id) === String(id));
   if (index !== -1) {
     books[index] = { ...books[index], ...updates };
     localStorage.setItem(STORAGE_KEYS.BOOKS, JSON.stringify(books));
@@ -291,11 +338,9 @@ export function updateOrder(id: number, updates: Partial<Order>): void {
   }
 }
 
-// Delete functions
-
-export function deleteBook(id: number): void {
+export function deleteBook(id: BookId): void {
   const books = getBooks();
-  const filtered = books.filter((b) => b.id !== id);
+  const filtered = books.filter((book) => String(book.id) !== String(id));
   localStorage.setItem(STORAGE_KEYS.BOOKS, JSON.stringify(filtered));
 }
 
@@ -305,10 +350,8 @@ export function deleteOrder(id: number): void {
   localStorage.setItem(STORAGE_KEYS.ORDERS, JSON.stringify(filtered));
 }
 
-// Find functions
-
-export function findBookById(id: number): Book | undefined {
-  return getBooks().find((b) => b.id === id);
+export function findBookById(id: BookId): Book | undefined {
+  return getBooks().find((book) => String(book.id) === String(id));
 }
 
 export function findUserByUsername(username: string): User | undefined {
@@ -319,25 +362,23 @@ export function findUserById(id: number): User | undefined {
   return getUsers().find((u) => u.id === id);
 }
 
-export function findBooksByCategory(category: BookCategory): Book[] {
-  return getBooks().filter((b) => b.category === category);
+export function findBooksByGenre(genre: string): Book[] {
+  return getBooks().filter((book) => book.genre === genre);
 }
 
 export function findOrdersByUserId(userId: number): Order[] {
   return getOrders().filter((o) => o.user_id === userId);
 }
 
-export function findReviewsByBookId(bookId: number): Review[] {
-  return getReviews().filter((r) => r.book_id === bookId);
+export function findReviewsByBookId(bookId: BookId): Review[] {
+  return getReviews().filter((review) => String(review.book_id) === String(bookId));
 }
-
-// Clear all data (for testing/reset)
 
 export function clearDB(): void {
   localStorage.removeItem(STORAGE_KEYS.BOOKS);
+  localStorage.removeItem(STORAGE_KEYS.BOOKS_SNAPSHOT);
   localStorage.removeItem(STORAGE_KEYS.USERS);
   localStorage.removeItem(STORAGE_KEYS.REVIEWS);
   localStorage.removeItem(STORAGE_KEYS.ORDERS);
   localStorage.removeItem(STORAGE_KEYS.DB_INITIALIZED);
-  console.log("🗑️  Mock database cleared!");
 }

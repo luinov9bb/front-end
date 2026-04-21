@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import FilterButtons from "../components/FilterButtons";
 import ProductList from "../components/ProductList";
 import Counter from "../components/Counter";
-import { products, type Product } from "../data/products";
+import { getBooks } from "../mock/mockDB";
 import { useFavorites } from "../context/FavoritesContext";
 import stateMessageStyles from "../pages/StateMessage.module.css";
 import styles from "./Catalog.module.css";
@@ -10,65 +10,17 @@ import styles from "./Catalog.module.css";
 function Catalog() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
-  const [allProducts, setAllProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const { favoriteIds, toggleFavorite } = useFavorites();
+  const books = useMemo(() => getBooks(), []);
 
-  const loadProducts = async () => {
-    try {
-      setLoading(true);
-      setError(null);
+  const genres = useMemo(
+    () => [...new Set(books.map((book) => book.genre))].sort((a, b) => a.localeCompare(b)),
+    [books]
+  );
 
-      // всегда добавляем локальные мок-данные
-      let combined: Product[] = [...products];
-
-      // попытка получить дополнительные товары с fakestoreapi
-      const response = await fetch("https://fakestoreapi.com/products");
-
-      if (!response.ok) {
-        throw new Error("Response not ok");
-      }
-
-      type FakeStoreProduct = {
-        id: number;
-        title: string;
-        price: number;
-        category: string;
-        image: string;
-      };
-
-      const data = await response.json();
-
-      const apiProducts: Product[] = (data as FakeStoreProduct[]).map(
-        (item) => ({
-          id: item.id + 1000,
-          name: item.title,
-          price: Math.round(item.price * 18),
-          category: item.category,
-          image: item.image,
-        })
-      );
-
-      combined = [...combined, ...apiProducts];
-
-      setAllProducts(combined);
-    } catch {
-      setError(
-        "Не удалось загрузить товары с fakestoreapi. Попробуйте ещё раз позже."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadProducts();
-  }, []);
-
-  const filteredProducts = allProducts
-    .filter((p) => p.name.toLowerCase().includes(search.toLocaleLowerCase()))
-    .filter((p) => (category === "All" ? true : p.category === category));
+  const filteredBooks = books
+    .filter((book) => book.title.toLowerCase().includes(search.toLowerCase()))
+    .filter((book) => (category === "All" ? true : book.genre === category));
 
   return (
     <>
@@ -85,40 +37,27 @@ function Catalog() {
 
       <div className={styles.catalogRow}>
         <aside className={styles.sidebar}>
-          <FilterButtons setCategory={setCategory} />
+          <FilterButtons
+            genres={genres}
+            selectedGenre={category}
+            setCategory={setCategory}
+          />
         </aside>
         <main className={styles.content}>
-          {loading && (
-            <section className={`${stateMessageStyles.stateMessage} ${stateMessageStyles.loading}`}>
-              <p>Загрузка...</p>
+          <section id="catalog">
+            <Counter count={filteredBooks.length} />
+          </section>
+
+          {filteredBooks.length === 0 ? (
+            <section className={`${stateMessageStyles.stateMessage} ${stateMessageStyles.empty}`}>
+              <p>Ничего не найдено</p>
             </section>
-          )}
-
-          {!loading && error && (
-            <section className={`${stateMessageStyles.stateMessage} ${stateMessageStyles.error}`}>
-              <p>{error}</p>
-              <button onClick={loadProducts}>Повторить попытку</button>
-            </section>
-          )}
-
-          {!loading && !error && (
-            <>
-              <section id="catalog">
-                <Counter count={filteredProducts.length} />
-              </section>
-
-              {filteredProducts.length === 0 ? (
-                <section className={`${stateMessageStyles.stateMessage} ${stateMessageStyles.empty}`}>
-                  <p>Ничего не найдено</p>
-                </section>
-              ) : (
-                <ProductList
-                  products={filteredProducts}
-                  favoriteIds={favoriteIds}
-                  onToggleFavorite={toggleFavorite}
-                />
-              )}
-            </>
+          ) : (
+            <ProductList
+              products={filteredBooks}
+              favoriteIds={favoriteIds}
+              onToggleFavorite={toggleFavorite}
+            />
           )}
         </main>
       </div>
@@ -126,4 +65,4 @@ function Catalog() {
   );
 }
 
-export default Catalog; 
+export default Catalog;

@@ -100,11 +100,23 @@
   line-height: 1.3;
 }
 
+.bookTitleLink {
+  color: inherit;
+  text-decoration: none;
+}
+
 .bookAuthor {
   font-family: 'Segoe UI', sans-serif;
   font-size: 0.9rem;
   color: #999;
   margin: 0 0 12px 0;
+}
+
+.bookMeta {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 0.85rem;
+  color: #777;
+  margin: 0 0 10px 0;
 }
 
 .bookPrice {
@@ -113,18 +125,6 @@
   font-weight: 600;
   color: #8B3A3A;
   margin: 0 0 12px 0;
-}
-
-.bookRating {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.85rem;
-  color: #666;
-}
-
-.reviewsCount {
-  color: #999;
 }
 
 @media (max-width: 768px) {

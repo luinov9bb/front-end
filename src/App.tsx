@@ -11,6 +11,7 @@ import Admin from "./pages/Admin"
 import Profile from "./pages/Profile"
 import Favorites from "./pages/Favorites"
 import Contacts from "./pages/Contacts"
+import BookDetails from "./pages/BookDetails"
 
 function App(){
     return(
@@ -18,6 +19,7 @@ function App(){
             <Route element={<Layout />}>
                 <Route path="/" element={<Home />} />
                 <Route path="/catalog" element={<Catalog />} />
+                <Route path="/books/:id" element={<BookDetails />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />

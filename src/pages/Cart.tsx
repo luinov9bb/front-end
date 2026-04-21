@@ -1,5 +1,5 @@
-import { useCart } from "../context/CartContext";
 import { Link } from "react-router-dom";
+import { useCart } from "../context/CartContext";
 import styles from "./Cart.module.css";
 
 function Cart() {
@@ -25,11 +25,15 @@ function Cart() {
       <div className={styles.cartContent}>
         <div className={styles.cartItems}>
           {cartItems.map((item) => (
-            <div key={item.id} className={styles.cartItem}>
-              <img src={item.image} alt={item.name} className={styles.itemImage} />
+            <div key={String(item.id)} className={styles.cartItem}>
+              <Link to={`/books/${item.id}`} className={styles.itemLink}>
+                <img src={item.image} alt={item.name} className={styles.itemImage} />
+              </Link>
 
               <div className={styles.itemDetails}>
-                <h3>{item.name}</h3>
+                <Link to={`/books/${item.id}`} className={styles.itemTitleLink}>
+                  <h3>{item.name}</h3>
+                </Link>
                 <p className={styles.itemPrice}>{item.price} лей</p>
               </div>
 
@@ -40,13 +44,13 @@ function Cart() {
                   }
                   className={styles.quantityBtn}
                 >
-                  −
+                  -
                 </button>
                 <input
                   type="number"
                   value={item.quantity}
                   onChange={(e) =>
-                    updateQuantity(item.id, parseInt(e.target.value) || 1)
+                    updateQuantity(item.id, parseInt(e.target.value, 10) || 1)
                   }
                   className={styles.quantityInput}
                   min="1"
@@ -68,7 +72,7 @@ function Cart() {
                 className={styles.removeBtn}
                 aria-label={`Удалить ${item.name}`}
               >
-                ✕
+                ×
               </button>
             </div>
           ))}
@@ -81,10 +85,7 @@ function Cart() {
             <span>{totalPrice} лей</span>
           </div>
           <button className={styles.checkoutBtn}>Оформить заказ</button>
-          <button
-            onClick={clearCart}
-            className={styles.clearCartBtn}
-          >
+          <button onClick={clearCart} className={styles.clearCartBtn}>
             Очистить корзину
           </button>
           <Link to="/catalog" className={styles.continueShopping}>

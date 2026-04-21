@@ -1,0 +1,126 @@
+.page {
+  width: 100%;
+}
+
+.panel {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 56px 24px 72px;
+  background: #f5f1e8;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 460px) minmax(320px, 1fr);
+  gap: 48px;
+  align-items: start;
+}
+
+.coverFrame {
+  border: 1px solid #e5e7eb;
+  background: #ede7db;
+  padding: 14px;
+}
+
+.cover {
+  width: 100%;
+  aspect-ratio: 3 / 4.4;
+  object-fit: cover;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  color: #2f3a32;
+}
+
+.title {
+  margin: 0 0 18px;
+  font-family: "Cormorant Garamond", "Times New Roman", serif;
+  font-size: clamp(2.4rem, 4vw, 3.4rem);
+  line-height: 1.05;
+  color: #25352b;
+}
+
+.meta {
+  margin: 0 0 24px;
+  font-family: "Gill Sans", "Trebuchet MS", sans-serif;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+
+.description {
+  margin: 0 0 32px;
+  font-family: "Gill Sans", "Trebuchet MS", sans-serif;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #3c403b;
+}
+
+.bottom {
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+.price {
+  margin: 0 0 16px;
+  font-family: "Cormorant Garamond", "Times New Roman", serif;
+  font-size: 2rem;
+  color: #25352b;
+}
+
+.button {
+  border: none;
+  border-radius: 2px;
+  padding: 14px 32px;
+  font-family: "Gill Sans", "Trebuchet MS", sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: #4d6653;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.button:hover {
+  opacity: 0.9;
+  transform: none;
+}
+
+.notFound {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 96px 24px;
+  text-align: center;
+  background: #f5f1e8;
+  color: #25352b;
+}
+
+.notFoundTitle {
+  margin: 0 0 12px;
+  font-family: "Cormorant Garamond", "Times New Roman", serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.notFoundText {
+  margin: 0;
+  font-family: "Gill Sans", "Trebuchet MS", sans-serif;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #6b7280;
+}
+
+@media (max-width: 900px) {
+  .panel {
+    padding: 40px 20px 56px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}

@@ -44,6 +44,12 @@
   color: #000000;
 }
 
+.active {
+  background: #f1efe9 !important;
+  color: #000000 !important;
+  font-weight: 700 !important;
+}
+
 @media (max-width: 768px) {
   .section {
     padding: clamp(10px, 1.5vw, 16px);

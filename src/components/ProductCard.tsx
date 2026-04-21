@@ -1,41 +1,50 @@
-import type { Product } from "../data/products";
+import { Link } from "react-router-dom";
+import type { Book, BookId } from "../mock/mockDB";
 import { useCart } from "../context/CartContext";
 import styles from "./ProductCard.module.css";
 
 type ProductCardProps = {
-    product: Product;
-    isFavorite: boolean;
-    onToggleFavorite: (productId: number) => void;
+  product: Book;
+  isFavorite: boolean;
+  onToggleFavorite: (productId: BookId) => void;
+};
+
+function ProductCard({ product, isFavorite, onToggleFavorite }: ProductCardProps) {
+  const { addToCart } = useCart();
+
+  const handleAddToCart = () => {
+    addToCart({
+      id: product.id,
+      name: product.title,
+      price: product.price,
+      image: product.coverImage,
+      quantity: 1,
+    });
+  };
+
+  return (
+    <div className={styles.card}>
+      <Link to={`/books/${product.id}`} className={styles.cardLink}>
+        <img src={product.coverImage} alt={product.title} />
+        <h3 className={styles.cardTitle} title={product.title}>
+          {product.title}
+        </h3>
+      </Link>
+      <p>{product.price} лей</p>
+      <div className={styles.actions}>
+        <button
+          type="button"
+          onClick={() => onToggleFavorite(product.id)}
+          className={styles.favoriteBtn}
+        >
+          {isFavorite ? "В избранном" : "В избранное"}
+        </button>
+        <button type="button" onClick={handleAddToCart} className={styles.cartBtn}>
+          В корзину
+        </button>
+      </div>
+    </div>
+  );
 }
 
-function ProductCard({product, isFavorite, onToggleFavorite}:ProductCardProps){
-    const { addToCart } = useCart();
-
-    const handleAddToCart = () => {
-        addToCart({
-            id: product.id,
-            name: product.name,
-            price: product.price,
-            image: product.image,
-            quantity: 1
-        });
-    };
-
-    return(
-        <div className={styles.card}>
-            <img src={product.image} alt={product.name} />
-            <h3 className={styles.cardTitle} title={product.name}>{product.name}</h3>
-            <p>{product.price} лей</p>
-            <div className={styles.actions}>
-                <button type="button" onClick={()=>onToggleFavorite(product.id)} className={styles.favoriteBtn}>
-                  {isFavorite ? "В избранном" : "В избранное"}
-                </button>
-                <button type="button" onClick={handleAddToCart} className={styles.cartBtn}>
-                  В корзину
-                </button>
-            </div>
-        </div>
-    )
-}
-
-export default ProductCard  
+export default ProductCard;

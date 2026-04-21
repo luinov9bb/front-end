@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import AboutStyles from "../pages/About.module.css";
 import homeStyles from "../pages/Home.module.css";
 import Carousel from "../components/Carousel";
@@ -13,18 +14,18 @@ function Home() {
   const carouselSlides = [
     {
       id: 1,
-      image: "https://picsum.photos/1200/600?random=1",
-      title: "Книги по литературе",
+      image: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=1400&q=80",
+      title: "Книги для вдумчивого чтения",
     },
     {
       id: 2,
-      image: "https://picsum.photos/1200/600?random=2",
-      title: "Популярные издания",
+      image: "https://images.unsplash.com/photo-1519682337058-a94d519337bc?auto=format&fit=crop&w=1400&q=80",
+      title: "Современная библиотека дома",
     },
     {
       id: 3,
-      image: "https://picsum.photos/1200/600?random=3",
-      title: "Лучшие бестселлеры",
+      image: "https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1400&q=80",
+      title: "Лучшие издания и классика",
     },
   ];
 
@@ -32,43 +33,58 @@ function Home() {
     <div className={homeStyles.contentPanel}>
       <Carousel slides={carouselSlides} autoPlay={true} autoPlayInterval={5000} />
 
-      {/* Новые поступления */}
       <section className={homeStyles.newArrivalsSection}>
         <h2 className={homeStyles.sectionTitle}>Новые поступления</h2>
         <div className={homeStyles.booksGrid}>
-          {latestBooks.map((book) => (
-            <div key={book.id} className={homeStyles.bookCard}>
-              <div className={homeStyles.bookImageContainer}>
-                <img src={book.image} alt={book.name} className={homeStyles.bookImage} />
-                <button
-                  className={homeStyles.favoriteButton}
-                  onClick={() => toggleFavorite(book.id)}
-                  aria-label="Добавить в избранное"
-                >
-                  {favoriteIds.has(book.id) ? '❤️' : '🤍'}
-                </button>
+          {latestBooks.map((book) => {
+            const isFavorite = Array.from(favoriteIds).some(
+              (favoriteId) => String(favoriteId) === String(book.id)
+            );
+
+            return (
+              <div key={String(book.id)} className={homeStyles.bookCard}>
+                <div className={homeStyles.bookImageContainer}>
+                  <Link to={`/books/${book.id}`}>
+                    <img
+                      src={book.coverImage}
+                      alt={book.title}
+                      className={homeStyles.bookImage}
+                    />
+                  </Link>
+                  <button
+                    className={homeStyles.favoriteButton}
+                    onClick={() => toggleFavorite(book.id)}
+                    aria-label="Добавить в избранное"
+                  >
+                    {isFavorite ? "♥" : "♡"}
+                  </button>
+                </div>
+                <Link to={`/books/${book.id}`} className={homeStyles.bookTitleLink}>
+                  <h3 className={homeStyles.bookTitle}>{book.title}</h3>
+                </Link>
+                <p className={homeStyles.bookAuthor}>{book.author}</p>
+                <p className={homeStyles.bookMeta}>
+                  {book.genre} • {book.year} • {book.pages} стр.
+                </p>
+                <p className={homeStyles.bookPrice}>{book.price} лей</p>
               </div>
-              <h3 className={homeStyles.bookTitle}>{book.name}</h3>
-              <p className={homeStyles.bookAuthor}>{book.author}</p>
-              <p className={homeStyles.bookPrice}>{book.price} ₽</p>
-              <div className={homeStyles.bookRating}>
-                <span>★ {book.rating}</span>
-                <span className={homeStyles.reviewsCount}>({book.reviews_count})</span>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
       <section className={AboutStyles.about}>
         <h2>О нашем магазине</h2>
         <p>
-          BookStore - ваш надежный партнер в мире книг. Мы предлагаем огромный выбор литературы на любой вкус и возраст:
-          от захватывающих романов и увлекательной фантастики до полезных учебников по программированию и книг по финансам.
+          BookStore - ваш надежный партнер в мире книг. Мы собираем сильную
+          художественную и нон-фикшн литературу: от классики и фэнтези до
+          психологии, программирования и финансов.
           <br />
           <br />
-          Каждая книга в нашем каталоге тщательно отобрана нашей командой экспертов. Мы работаем только с проверенными издательствами
-          и авторами, чтобы гарантировать качество каждого издания. Наша миссия - сделать чтение доступным и удовольствием для каждого.
+          Каждое издание в каталоге отбирается с упором на качество, смысл и
+          удовольствие от чтения. Наша цель - сделать хорошие книги доступными и
+          помочь читателю быстро найти именно ту историю или идею, которая нужна
+          сейчас.
         </p>
       </section>
 

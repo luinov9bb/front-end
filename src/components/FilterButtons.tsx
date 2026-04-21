@@ -1,21 +1,34 @@
 import styles from "./FilterButtons.module.css";
 
 type FilterButtonsProps = {
-  setCategory: (value: string) => void
-}
+  genres: string[];
+  selectedGenre: string;
+  setCategory: (value: string) => void;
+};
 
-function FilterButtons({ setCategory} : FilterButtonsProps){
+function FilterButtons({ genres, selectedGenre, setCategory }: FilterButtonsProps) {
   return (
-      <section className={styles.section}>
-          <h2 className={styles.title}>Жанры</h2>
-          <button onClick={() => setCategory("All")}>Все жанры</button>
-          <button onClick={() => setCategory("programming")}>Программирование</button>
-          <button onClick={() => setCategory("fiction")}>Фэнтези</button>
-          <button onClick={() => setCategory("finance")}>Финансы</button>
-          <button onClick={() => setCategory("western")}>Вестерн</button>
-          <button onClick={() => setCategory("roman")}>Романы</button>
-      </section>
-  )
+    <section className={styles.section}>
+      <h2 className={styles.title}>Жанры</h2>
+      <button
+        type="button"
+        className={selectedGenre === "All" ? styles.active : undefined}
+        onClick={() => setCategory("All")}
+      >
+        Все жанры
+      </button>
+      {genres.map((genre) => (
+        <button
+          key={genre}
+          type="button"
+          className={selectedGenre === genre ? styles.active : undefined}
+          onClick={() => setCategory(genre)}
+        >
+          {genre}
+        </button>
+      ))}
+    </section>
+  );
 }
 
-export default FilterButtons
+export default FilterButtons;
