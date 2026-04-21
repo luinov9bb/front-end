@@ -47,13 +47,16 @@ header {
   display: flex;
   align-items: center;
   gap: clamp(8px, 1.5vw, 16px);
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  width: 100%;
 }
 
 nav {
   display: flex;
   align-items: center;
   gap: clamp(4px, 1vw, 8px);
+  flex-shrink: 0;
+  flex: 1 0 auto;
 }
 
 nav a {
@@ -98,6 +101,7 @@ nav a:hover {
   transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease;
   min-height: 44px;
   font-weight: 600;
+  flex-shrink: 0;
   text-transform: uppercase;
   letter-spacing: 0.8px;
 }
@@ -305,6 +309,8 @@ nav a:hover {
   display: flex;
   align-items: center;
   gap: clamp(8px, 1.5vw, 12px);
+  margin-left: auto;
+  flex-shrink: 0;
 }
 
 .username {
@@ -338,47 +344,80 @@ nav a:hover {
   color: #333333;
 }
 
-.authButtons {
-  display: flex;
-  gap: clamp(8px, 1vw, 12px);
+.userDropdown {
+  position: relative;
+  margin-left: auto;
 }
 
-.loginButton,
-.registerButton {
+.userMenuButton {
   padding: clamp(8px, 1.2vw, 12px) clamp(14px, 2vw, 18px);
   border-radius: 999px;
+  background: #8B3A3A;
   color: #FFFFFF;
-  text-decoration: none;
+  cursor: pointer;
   font-size: clamp(14px, 1.5vw, 16px);
-  font-weight: 700;
   font-family: 'Crimson Text', serif;
-  transition: all 0.2s ease;
-  display: inline-flex;
-  align-items: center;
   white-space: nowrap;
+  transition: all 0.2s ease;
   min-height: 44px;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.loginButton {
-  background: #666666;
+.userMenuButton svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
 }
 
-.loginButton:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  background: #555555;
-}
-
-.registerButton {
-  background: #8B3A3A;
-}
-
-.registerButton:hover {
+.userMenuButton:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   background: #7a3333;
+}
+
+.userDropdownMenu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #FFFFFF;
+  border: 1px solid #E0E0E0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1001;
+  min-width: 180px;
+  margin-top: 8px;
+}
+
+.dropdownLink {
+  display: block;
+  padding: clamp(12px, 1.5vw, 16px) clamp(16px, 2vw, 20px);
+  color: #333333;
+  text-decoration: none;
+  font-size: clamp(14px, 1.5vw, 16px);
+  font-family: 'Crimson Text', serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  transition: background 0.2s ease;
+  white-space: nowrap;
+}
+
+.dropdownLink:first-child {
+  border-radius: 8px 8px 0 0;
+}
+
+.dropdownLink:last-child {
+  border-radius: 0 0 8px 8px;
+}
+
+.dropdownLink:hover {
+  background: #F0F0F0;
 }
 
 .mobileUserSection {
