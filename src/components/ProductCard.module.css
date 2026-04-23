@@ -4,7 +4,7 @@
   align-items: stretch;
   border-radius: 0;
   border: 1px solid #F0F0F0;
-  padding: clamp(12px, 2vw, 16px);
+  padding: clamp(10px, 1.4vw, 14px);
   background: #FFFFFF;
   box-shadow: none;
   text-align: left;
@@ -13,14 +13,16 @@
 }
 
 .cardLink {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   color: inherit;
   text-decoration: none;
 }
 
 .card img {
   width: 100%;
-  height: 300px;
+  height: clamp(420px, 38vw, 560px);
   object-fit: cover;
   border-radius: 0;
   margin-bottom: clamp(8px, 1.5vw, 12px);
@@ -136,6 +138,7 @@
   }
 
   .card img {
+    height: clamp(360px, 88vw, 480px);
     margin-bottom: clamp(6px, 1vw, 8px);
   }
 

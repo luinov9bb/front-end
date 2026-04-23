@@ -40,7 +40,7 @@ function BookDetails() {
           <div className={styles.details}>
             <h1 className={styles.title}>{book.title}</h1>
             <p className={styles.meta}>
-              {book.author} • {book.genre} • {book.year}
+              {book.author} • {book.genres.join(", ")} • {book.year}
             </p>
             <p className={styles.description}>{book.annotation}</p>
             <p className={styles.meta}>{book.pages} страниц</p>

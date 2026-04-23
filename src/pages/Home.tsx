@@ -64,7 +64,7 @@ function Home() {
                 </Link>
                 <p className={homeStyles.bookAuthor}>{book.author}</p>
                 <p className={homeStyles.bookMeta}>
-                  {book.genre} • {book.year} • {book.pages} стр.
+                  {book.genres.join(", ")} • {book.year} • {book.pages} стр.
                 </p>
                 <p className={homeStyles.bookPrice}>{book.price} лей</p>
               </div>
