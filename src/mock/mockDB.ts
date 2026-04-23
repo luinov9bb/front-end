@@ -87,7 +87,7 @@ export const mockBooks: Book[] = [
     id: 4,
     title: "Мюнхен",
     author: "Харрис Р.",
-    genres: ["Триллер", "История", "Роман"],
+    genres: ["Триллер", "История"],
     price: 112,
     year: 2026,
     pages: 656,

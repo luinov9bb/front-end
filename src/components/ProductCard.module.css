@@ -1,4 +1,5 @@
 .card {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -66,7 +67,6 @@
   display: flex;
   gap: clamp(4px, 1vw, 8px);
   margin-top: auto;
-  flex-wrap: wrap;
 }
 
 .card button {
@@ -111,25 +111,72 @@
   color: #1f3326;
 }
 
-.favoriteBtn {
-  background: transparent;
-  color: #333333;
-  border: 2px solid #333333;
-  border-radius: 2px;
-  padding: clamp(8px, 1.2vw, 12px) clamp(12px, 2vw, 16px);
+.favoriteIcon {
+  position: absolute;
+  top: clamp(12px, 1.4vw, 16px);
+  right: clamp(12px, 1.4vw, 16px);
+  z-index: 2;
+  flex: none;
+  width: 48px;
+  height: 48px;
+  min-height: 48px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
   cursor: pointer;
-  font-weight: 700;
-  font-family: 'Crimson Text', serif;
-  transition: background 0.2s ease, color 0.2s ease;
-  font-size: clamp(14px, 1.5vw, 16px);
-  min-height: 44px;
-  text-transform: uppercase;
-  letter-spacing: 1.2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  padding: 0;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 
-.favoriteBtn:hover {
-  background: #F5F5F2;
-  color: #000000;
+.favoriteIcon svg {
+  width: 24px;
+  height: 24px;
+  display: block;
+  overflow: visible;
+  transform-origin: center;
+  transition: transform 0.22s ease, filter 0.22s ease;
+}
+
+.favoriteIcon:hover {
+  transform: scale(1.06);
+  background: #ffffff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.favoriteIcon:hover svg {
+  transform: scale(1.08);
+}
+
+.favoriteIcon:active {
+  transform: scale(0.96);
+}
+
+.favoriteIcon:active svg {
+  transform: scale(0.92);
+}
+
+.favoriteIcon[aria-label="Убрать из избранного"] svg {
+  animation: favoritePop 0.28s ease;
+  filter: drop-shadow(0 2px 6px rgba(196, 61, 75, 0.28));
+}
+
+@keyframes favoritePop {
+  0% {
+    transform: scale(0.88);
+  }
+
+  55% {
+    transform: scale(1.14);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 @media (max-width: 480px) {
@@ -148,5 +195,13 @@
 
   .cartBtn {
     padding: clamp(6px, 1vw, 8px) clamp(8px, 1vw, 10px);
+  }
+
+  .favoriteIcon {
+    top: 10px;
+    right: 10px;
+    width: 44px;
+    height: 44px;
+    min-height: 44px;
   }
 }
