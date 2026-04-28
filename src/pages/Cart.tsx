@@ -84,7 +84,9 @@ function Cart() {
             <span>Сумма:</span>
             <span>{totalPrice} лей</span>
           </div>
-          <button className={styles.checkoutBtn}>Оформить заказ</button>
+          <Link to="/checkout" className={styles.checkoutBtn}>
+            Оформить заказ
+          </Link>
           <button onClick={clearCart} className={styles.clearCartBtn}>
             Очистить корзину
           </button>

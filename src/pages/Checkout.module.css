@@ -1,0 +1,192 @@
+.checkoutPage {
+  width: 100%;
+}
+
+.checkoutPanel {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 56px 24px 72px;
+  background: #f5f1e8;
+}
+
+.checkoutHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.checkoutHeader h1 {
+  margin: 0 0 10px;
+  font-family: "Cormorant Garamond", "Times New Roman", serif;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  color: #25352b;
+}
+
+.checkoutHeader p {
+  margin: 0;
+  font-family: "Gill Sans", "Trebuchet MS", sans-serif;
+  color: #4b5563;
+  line-height: 1.7;
+}
+
+.checkoutGrid {
+  display: grid;
+  grid-template-columns: minmax(320px, 1fr) 320px;
+  gap: 32px;
+}
+
+.checkoutFormCard,
+.orderSummaryCard,
+.confirmationCard {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 28px;
+}
+
+.checkoutFormCard h2,
+.orderSummaryCard h2,
+.confirmationCard h2 {
+  margin: 0 0 18px;
+  font-family: "Cormorant Garamond", "Times New Roman", serif;
+  font-size: 1.8rem;
+  color: #25352b;
+}
+
+.checkoutForm {
+  display: grid;
+  gap: 18px;
+}
+
+.fieldLabel {
+  font-family: "Gill Sans", "Trebuchet MS", sans-serif;
+  color: #374151;
+  font-size: 0.9rem;
+}
+
+.fieldInput,
+.textarea {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-family: "Gill Sans", "Trebuchet MS", sans-serif;
+  font-size: 0.95rem;
+  color: #2f3a32;
+  background: #f9fafb;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 96px;
+}
+
+.placeOrderButton,
+.shopButton {
+  width: 100%;
+  border: none;
+  border-radius: 999px;
+  padding: 14px 24px;
+  background: #4d6653;
+  color: #ffffff;
+  font-family: "Gill Sans", "Trebuchet MS", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.placeOrderButton:hover,
+.shopButton:hover {
+  background: #3b4d3a;
+}
+
+.orderSummaryCard {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.orderItems {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.orderItem {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #fafaf9;
+}
+
+.itemName {
+  margin: 0 0 4px;
+  font-family: "Cormorant Garamond", "Times New Roman", serif;
+  color: #1f2937;
+  font-size: 1rem;
+}
+
+.itemQuantity {
+  margin: 0;
+  color: #6b7280;
+  font-family: "Gill Sans", "Trebuchet MS", sans-serif;
+  font-size: 0.9rem;
+}
+
+.itemPrice {
+  margin: 0;
+  font-family: "Cormorant Garamond", "Times New Roman", serif;
+  font-size: 1rem;
+  color: #25352b;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #e5e7eb;
+  font-family: "Gill Sans", "Trebuchet MS", sans-serif;
+  color: #374151;
+}
+
+.summaryRow strong {
+  font-size: 1.3rem;
+  color: #1f2937;
+}
+
+.emptyCheckout {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 80px 24px;
+  text-align: center;
+  background: #f5f1e8;
+  border-radius: 16px;
+}
+
+.emptyCheckout h1 {
+  margin-bottom: 16px;
+  font-family: "Cormorant Garamond", "Times New Roman", serif;
+  font-size: clamp(2rem, 4vw, 2.6rem);
+  color: #25352b;
+}
+
+.emptyCheckout p {
+  margin-bottom: 24px;
+  color: #4b5563;
+  font-family: "Gill Sans", "Trebuchet MS", sans-serif;
+  line-height: 1.7;
+}
+
+@media (max-width: 960px) {
+  .checkoutGrid {
+    grid-template-columns: 1fr;
+  }
+}

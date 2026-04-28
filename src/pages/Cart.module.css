@@ -178,16 +178,19 @@
 }
 
 .checkoutBtn {
+  display: block;
   width: 100%;
   padding: clamp(8px, 1.5vw, 12px);
   background: #999999;
   color: white;
+  text-align: center;
+  text-decoration: none;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: clamp(13px, 1.5vw, 16px);
   font-weight: 600;
-  margin-bottom: clamp(6px, 1vw, 10px);
+  margin-bottom: 8px;
   transition: background 0.2s ease;
   font-family: 'Crimson Text', serif;
   min-height: 40px;

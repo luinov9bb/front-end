@@ -5,6 +5,7 @@ import Layout from "./components/Layout"
 import Home from "./pages/Home"
 import Catalog from "./pages/Catalog"
 import Cart from "./pages/Cart"
+import Checkout from "./pages/Checkout"
 import Login from "./pages/Login"
 import Register from "./pages/Register"
 import Admin from "./pages/Admin"
@@ -21,6 +22,7 @@ function App(){
                 <Route path="/catalog" element={<Catalog />} />
                 <Route path="/books/:id" element={<BookDetails />} />
                 <Route path="/cart" element={<Cart />} />
+                <Route path="/checkout" element={<Checkout />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/admin" element={<Admin />} />
