@@ -185,6 +185,38 @@
   line-height: 1.7;
 }
 
+.checkoutNotice {
+  margin: 0 0 24px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: #fef3c7;
+  border: 1px solid #fcd34d;
+  color: #92400e;
+  font-family: "Gill Sans", "Trebuchet MS", sans-serif;
+  line-height: 1.5;
+}
+
+.checkoutNotice a {
+  color: #b45309;
+  font-weight: 600;
+}
+
+.checkoutError {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  font-family: "Gill Sans", "Trebuchet MS", sans-serif;
+  font-size: 0.95rem;
+}
+
+.placeOrderButton:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
 @media (max-width: 960px) {
   .checkoutGrid {
     grid-template-columns: 1fr;

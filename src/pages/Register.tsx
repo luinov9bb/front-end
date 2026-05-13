@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import styles from "./Register.module.css";
@@ -13,9 +13,13 @@ function Register() {
   const { register, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
-  // Redirect if already logged in
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/", { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
+
   if (isAuthenticated) {
-    navigate("/");
     return null;
   }
 
@@ -25,6 +29,11 @@ function Register() {
 
     if (password !== confirmPassword) {
       setError("Пароли не совпадают");
+      return;
+    }
+
+    if (password.length < 8) {
+      setError("Пароль должен быть не короче 8 символов.");
       return;
     }
 
@@ -80,7 +89,7 @@ function Register() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Пароль (минимум 6 символов)"
+              placeholder="Пароль (минимум 8 символов)"
               disabled={loading}
               required
             />

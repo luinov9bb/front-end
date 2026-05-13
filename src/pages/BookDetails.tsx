@@ -1,34 +1,91 @@
-import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
-import {
-  addReview,
-  findBookById,
-  findReviewsByBookId,
-} from "../mock/mockDB";
-import type { Review } from "../mock/mockDB";
+import { fetchBookById } from "../api/books";
+import { createReview, fetchReviewsByBookId } from "../api/reviews";
+import type { Book, Review } from "../types/catalog";
 import styles from "./BookDetails.module.css";
+
+function formatSafeDate(iso: string): string {
+  const d = new Date(iso);
+  return Number.isNaN(d.getTime()) ? "—" : d.toLocaleDateString();
+}
 
 function BookDetails() {
   const { id } = useParams();
   const { addToCart } = useCart();
   const { currentUser, isAuthenticated } = useAuth();
-  const book = useMemo(() => (id ? findBookById(id) : undefined), [id]);
 
+  const [book, setBook] = useState<Book | null | undefined>(undefined);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
   const [formError, setFormError] = useState("");
   const [reviewsOpen, setReviewsOpen] = useState(false);
   const [reviewFormOpen, setReviewFormOpen] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  const numericId = useMemo(() => {
+    if (!id) {
+      return NaN;
+    }
+    const n = Number(id);
+    return Number.isFinite(n) ? n : NaN;
+  }, [id]);
+
+  const reloadReviews = useCallback(async (bookId: number) => {
+    const list = await fetchReviewsByBookId(bookId);
+    setReviews(list);
+  }, []);
 
   useEffect(() => {
-    if (id) {
-      setReviews(findReviewsByBookId(id));
-      setReviewFormOpen(false);
-    }
-  }, [id]);
+    let cancelled = false;
+    void (async () => {
+      await Promise.resolve();
+      if (cancelled) {
+        return;
+      }
+
+      if (!id || Number.isNaN(numericId) || numericId <= 0) {
+        setBook(null);
+        setReviews([]);
+        setLoadError(null);
+        return;
+      }
+
+      setLoadError(null);
+      setBook(undefined);
+
+      try {
+        const b = await fetchBookById(numericId);
+        if (!cancelled) {
+          setBook(b);
+        }
+      } catch {
+        if (!cancelled) {
+          setLoadError("Не удалось загрузить книгу.");
+          setBook(null);
+        }
+      }
+
+      try {
+        await reloadReviews(numericId);
+      } catch {
+        if (!cancelled) {
+          setReviews([]);
+        }
+      }
+
+      if (!cancelled) {
+        setReviewFormOpen(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [id, numericId, reloadReviews]);
 
   const averageRating = useMemo(() => {
     if (!reviews.length) {
@@ -38,16 +95,19 @@ function BookDetails() {
   }, [reviews]);
 
   const handleAddToCart = () => {
+    if (!book) {
+      return;
+    }
     addToCart({
-      id: book!.id,
-      name: book!.title,
-      price: book!.price,
-      image: book!.coverImage,
+      id: book.id,
+      name: book.title,
+      price: book.price,
+      image: book.coverImageUrl ?? "",
       quantity: 1,
     });
   };
 
-  const handleSubmitReview = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmitReview = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!isAuthenticated) {
@@ -60,24 +120,41 @@ function BookDetails() {
       return;
     }
 
-    if (!book) {
+    if (comment.trim().length < 10) {
+      setFormError("Отзыв должен быть не короче 10 символов.");
       return;
     }
 
-    addReview({
-      id: 0,
-      book_id: book.id,
-      user_id: currentUser?.id ?? 0,
-      user_name: currentUser?.username ?? "Гость",
-      rating,
-      comment: comment.trim(),
-      created_at: new Date().toISOString(),
-    });
+    if (!book) {
+      setFormError("Некорректная книга.");
+      return;
+    }
 
-    setReviews(findReviewsByBookId(book.id));
-    setComment("");
-    setRating(5);
+    const uid = currentUser?.id;
+    if (!uid) {
+      setFormError("Не удалось определить пользователя.");
+      return;
+    }
+
     setFormError("");
+    try {
+      const res = await createReview({
+        userId: uid,
+        bookId: book.id,
+        rating,
+        text: comment.trim(),
+      });
+      if (!res.isSuccess) {
+        setFormError(res.message || "Не удалось отправить отзыв.");
+        return;
+      }
+      await reloadReviews(Number(book.id));
+      setComment("");
+      setRating(5);
+      setReviewFormOpen(false);
+    } catch {
+      setFormError("Не удалось отправить отзыв.");
+    }
   };
 
   const renderStars = (value: number) => {
@@ -94,6 +171,23 @@ function BookDetails() {
     ));
   };
 
+  if (loadError) {
+    return (
+      <section className={styles.notFound}>
+        <h1 className={styles.notFoundTitle}>Ошибка загрузки</h1>
+        <p className={styles.notFoundText}>{loadError}</p>
+      </section>
+    );
+  }
+
+  if (book === undefined) {
+    return (
+      <section className={styles.notFound}>
+        <h1 className={styles.notFoundTitle}>Загрузка…</h1>
+      </section>
+    );
+  }
+
   if (!book) {
     return (
       <section className={styles.notFound}>
@@ -105,12 +199,14 @@ function BookDetails() {
     );
   }
 
+  const categoryLine = book.category.trim() || "—";
+
   return (
     <section className={styles.page}>
       <div className={styles.panel}>
         <div className={styles.grid}>
           <div className={styles.coverFrame}>
-            <img className={styles.cover} src={book.coverImage} alt={book.title} />
+            <img className={styles.cover} src={book.coverImageUrl ?? ""} alt={book.title} />
           </div>
 
           <div className={styles.details}>
@@ -124,18 +220,14 @@ function BookDetails() {
               </span>
             </div>
             <p className={styles.meta}>
-              {book.author} • {book.genres.join(", ")} • {book.year}
+              {book.author} • {categoryLine}
             </p>
-            <p className={styles.description}>{book.annotation}</p>
-            <p className={styles.meta}>{book.pages} страниц</p>
+            <p className={styles.description}>{book.description}</p>
+            <p className={styles.meta}>На складе: {book.stock} шт.</p>
 
             <div className={styles.bottom}>
               <p className={styles.price}>{book.price} лей</p>
-              <button
-                type="button"
-                className={styles.button}
-                onClick={handleAddToCart}
-              >
+              <button type="button" className={styles.button} onClick={handleAddToCart}>
                 В корзину
               </button>
             </div>
@@ -179,9 +271,7 @@ function BookDetails() {
 
                     <div className={styles.reviewList}>
                       {reviews.length === 0 ? (
-                        <p className={styles.emptyMessage}>
-                          Никто еще не оставил отзыв. Станьте первым!
-                        </p>
+                        <p className={styles.emptyMessage}>Никто еще не оставил отзыв. Станьте первым!</p>
                       ) : (
                         reviews
                           .slice()
@@ -189,13 +279,14 @@ function BookDetails() {
                           .map((review) => (
                             <article key={review.id} className={styles.reviewItem}>
                               <div className={styles.reviewHeader}>
-                                <div className={styles.reviewAuthor}>{review.user_name}</div>
-                                <div className={styles.starsRow}>
-                                  {renderStars(review.rating)}
-                                </div>
+                                <div className={styles.reviewAuthor}>{review.username}</div>
+                                <div className={styles.starsRow}>{renderStars(review.rating)}</div>
                               </div>
-                              <p className={styles.reviewComment}>{review.comment}</p>
-                              <p className={styles.reviewMeta}>{new Date(review.created_at).toLocaleDateString()}</p>
+                              <p className={styles.reviewComment}>{review.text}</p>
+                              <p className={styles.reviewMeta}>
+                                {formatSafeDate(review.createdAt)}
+                                {!review.isApproved ? " · на модерации" : ""}
+                              </p>
                             </article>
                           ))
                       )}
@@ -225,7 +316,9 @@ function BookDetails() {
                                         className={`${styles.ratingStar} ${
                                           value <= rating ? styles.ratingStarActive : ""
                                         }`}
-                                      >★</span>
+                                      >
+                                        ★
+                                      </span>
                                     </label>
                                   );
                                 })}

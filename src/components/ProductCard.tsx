@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import type { Book, BookId } from "../mock/mockDB";
+import type { Book, BookId } from "../types/catalog";
 import { useCart } from "../context/CartContext";
 import styles from "./ProductCard.module.css";
 
@@ -17,7 +17,7 @@ function ProductCard({ product, isFavorite, onToggleFavorite }: ProductCardProps
       id: product.id,
       name: product.title,
       price: product.price,
-      image: product.coverImage,
+      image: product.coverImageUrl ?? "",
       quantity: 1,
     });
   };
@@ -66,7 +66,7 @@ function ProductCard({ product, isFavorite, onToggleFavorite }: ProductCardProps
       </button>
 
       <Link to={`/books/${product.id}`} className={styles.cardLink}>
-        <img src={product.coverImage} alt={product.title} />
+        <img src={product.coverImageUrl ?? ""} alt={product.title} />
         <h3 className={styles.cardTitle} title={product.title}>
           {product.title}
         </h3>

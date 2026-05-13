@@ -1,30 +1,30 @@
 import styles from "./FilterButtons.module.css";
 
 type FilterButtonsProps = {
-  genres: string[];
-  selectedGenre: string;
+  categories: string[];
+  selectedCategory: string;
   setCategory: (value: string) => void;
 };
 
-function FilterButtons({ genres, selectedGenre, setCategory }: FilterButtonsProps) {
+function FilterButtons({ categories, selectedCategory, setCategory }: FilterButtonsProps) {
   return (
     <section className={styles.section}>
-      <h2 className={styles.title}>Жанры</h2>
+      <h2 className={styles.title}>Категории</h2>
       <button
         type="button"
-        className={selectedGenre === "All" ? styles.active : undefined}
+        className={selectedCategory === "All" ? styles.active : undefined}
         onClick={() => setCategory("All")}
       >
-        Все жанры
+        Все категории
       </button>
-      {genres.map((genre) => (
+      {categories.map((cat) => (
         <button
-          key={genre}
+          key={cat}
           type="button"
-          className={selectedGenre === genre ? styles.active : undefined}
-          onClick={() => setCategory(genre)}
+          className={selectedCategory === cat ? styles.active : undefined}
+          onClick={() => setCategory(cat)}
         >
-          {genre}
+          {cat}
         </button>
       ))}
     </section>

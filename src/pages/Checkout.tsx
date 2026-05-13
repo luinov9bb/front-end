@@ -1,25 +1,64 @@
 import { useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
+import { checkoutFromCartRequest } from "../api/orders";
+import { ApiError } from "../api/client";
 import styles from "./Checkout.module.css";
 
 function Checkout() {
-  const { cartItems, totalPrice, clearCart } = useCart();
+  const { cartItems, totalPrice, refreshCart } = useCart();
+  const { isAuthenticated, currentUser } = useAuth();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [comment, setComment] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [orderMessage, setOrderMessage] = useState("");
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setError("");
 
     if (!name.trim() || !phone.trim() || !address.trim()) {
       return;
     }
 
-    clearCart();
-    setSubmitted(true);
+    if (!isAuthenticated || !currentUser) {
+      setError("Войдите в аккаунт, чтобы оформить заказ.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await checkoutFromCartRequest({ userId: currentUser.id });
+      if (!res.isSuccess) {
+        setError(res.message || "Не удалось оформить заказ.");
+        setLoading(false);
+        return;
+      }
+      setOrderMessage(res.message || "Заказ принят.");
+      await refreshCart();
+      setSubmitted(true);
+    } catch (e) {
+      if (e instanceof ApiError) {
+        const body = e.body;
+        if (typeof body === "object" && body !== null && "message" in body) {
+          const m = (body as { message: unknown }).message;
+          if (typeof m === "string" && m.trim()) {
+            setError(m);
+            setLoading(false);
+            return;
+          }
+        }
+        setError(e.message);
+      } else {
+        setError("Ошибка сети или сервера.");
+      }
+    }
+    setLoading(false);
   };
 
   if (!cartItems.length && !submitted) {
@@ -44,10 +83,20 @@ function Checkout() {
           </div>
         </div>
 
+        {!isAuthenticated && cartItems.length > 0 && (
+          <p className={styles.checkoutNotice}>
+            Для оплаты и создания заказа нужен аккаунт. <Link to="/login">Войти</Link>
+          </p>
+        )}
+
         {submitted ? (
           <div className={styles.confirmationCard}>
             <h2>Спасибо за заказ!</h2>
-            <p>Ваш заказ успешно принят в обработку.</p>
+            <p>{orderMessage}</p>
+            <p>
+              {name.trim()} · {phone.trim()} · {address.trim()}
+              {comment.trim() ? ` · ${comment.trim()}` : ""}
+            </p>
             <Link to="/" className={styles.shopButton}>
               На главную
             </Link>
@@ -68,6 +117,7 @@ function Checkout() {
                   className={styles.fieldInput}
                   placeholder="ФИО"
                   required
+                  disabled={loading}
                 />
 
                 <label className={styles.fieldLabel} htmlFor="customerPhone">
@@ -81,6 +131,7 @@ function Checkout() {
                   className={styles.fieldInput}
                   placeholder="Например +373 600 00000"
                   required
+                  disabled={loading}
                 />
 
                 <label className={styles.fieldLabel} htmlFor="deliveryAddress">
@@ -94,6 +145,7 @@ function Checkout() {
                   placeholder="Улица, дом, квартира"
                   rows={4}
                   required
+                  disabled={loading}
                 />
 
                 <label className={styles.fieldLabel} htmlFor="orderComment">
@@ -106,10 +158,13 @@ function Checkout() {
                   className={styles.textarea}
                   placeholder="Например, удобное время доставки"
                   rows={3}
+                  disabled={loading}
                 />
 
-                <button type="submit" className={styles.placeOrderButton}>
-                  Оформить заказ
+                {error && <p className={styles.checkoutError}>{error}</p>}
+
+                <button type="submit" className={styles.placeOrderButton} disabled={loading}>
+                  {loading ? "Отправка…" : "Оформить заказ"}
                 </button>
               </form>
             </div>

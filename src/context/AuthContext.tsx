@@ -1,9 +1,8 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
-import type { User } from "../mock/mockDB";
-import { findUserByUsername, addUser, getUsers } from "../mock/mockDB";
-
-type AuthUser = Omit<User, "password">;
+import type { AuthUser } from "../types/user";
+import { ApiError, AUTH_TOKEN_STORAGE_KEY, loginRequest, meRequest, registerRequest } from "../api";
+import { mapApiUserToAuthUser } from "../api/mappers/user";
 
 type AuthContextType = {
   currentUser: AuthUser | null;
@@ -18,86 +17,88 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const STORAGE_KEY = "bookstore_current_user";
 
+function readApiErrorMessage(error: unknown): string {
+  if (error instanceof ApiError) {
+    const body = error.body;
+    if (typeof body === "object" && body !== null && "message" in body) {
+      const m = (body as { message: unknown }).message;
+      if (typeof m === "string" && m.trim()) {
+        return m;
+      }
+    }
+    return error.message;
+  }
+  return "Неизвестная ошибка";
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
 
-  // Load user from localStorage on mount
   useEffect(() => {
-    const storedUser = localStorage.getItem(STORAGE_KEY);
-    if (storedUser) {
-      try {
-        const parsed = JSON.parse(storedUser);
-        setCurrentUser(parsed);
-      } catch {
-        localStorage.removeItem(STORAGE_KEY);
-      }
+    const token = localStorage.getItem(AUTH_TOKEN_STORAGE_KEY);
+    if (!token) {
+      localStorage.removeItem(STORAGE_KEY);
+      return;
     }
+
+    let cancelled = false;
+    meRequest()
+      .then((u) => {
+        const mapped = mapApiUserToAuthUser(u);
+        if (!cancelled) {
+          setCurrentUser(mapped);
+        }
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(mapped));
+      })
+      .catch(() => {
+        localStorage.removeItem(AUTH_TOKEN_STORAGE_KEY);
+        localStorage.removeItem(STORAGE_KEY);
+        if (!cancelled) {
+          setCurrentUser(null);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const login = async (username: string, password: string): Promise<{ success: boolean; error?: string }> => {
-    const user = findUserByUsername(username);
-
-    if (!user) {
-      return { success: false, error: "Пользователь не найден" };
+    try {
+      const data = await loginRequest(username.trim(), password);
+      if (!data.isSuccess || !data.token || !data.user) {
+        return { success: false, error: data.message || "Ошибка входа" };
+      }
+      localStorage.setItem(AUTH_TOKEN_STORAGE_KEY, data.token);
+      const mapped = mapApiUserToAuthUser(data.user);
+      setCurrentUser(mapped);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(mapped));
+      return { success: true };
+    } catch (e) {
+      return { success: false, error: readApiErrorMessage(e) };
     }
-
-    if (user.password !== password) {
-      return { success: false, error: "Неверный пароль" };
-    }
-
-    const { password: _, ...userWithoutPassword } = user;
-    setCurrentUser(userWithoutPassword);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(userWithoutPassword));
-
-    return { success: true };
   };
 
-  const register = async (username: string, email: string, password: string): Promise<{ success: boolean; error?: string }> => {
-    // Check if username already exists
-    if (findUserByUsername(username)) {
-      return { success: false, error: "Это имя пользователя уже занято" };
+  const register = async (
+    username: string,
+    email: string,
+    password: string,
+  ): Promise<{ success: boolean; error?: string }> => {
+    try {
+      const reg = await registerRequest(username.trim(), email.trim(), password);
+      if (!reg.isSuccess) {
+        return { success: false, error: reg.message || "Ошибка регистрации" };
+      }
+      return login(username.trim(), password);
+    } catch (e) {
+      return { success: false, error: readApiErrorMessage(e) };
     }
-
-    // Check if email already exists
-    const users = getUsers();
-    if (users.some((u) => u.email === email)) {
-      return { success: false, error: "Этот email уже зарегистрирован" };
-    }
-
-    // Validate password
-    if (password.length < 6) {
-      return { success: false, error: "Пароль должен быть не менее 6 символов" };
-    }
-
-    // Create new user
-    const newUser: User = {
-      id: 0, // Will be assigned by addUser
-      username,
-      email,
-      password,
-      role: "user",
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    };
-
-    addUser(newUser);
-
-    // Find the newly created user
-    const createdUser = findUserByUsername(username);
-    if (!createdUser) {
-      return { success: false, error: "Ошибка при создании пользователя" };
-    }
-
-    const { password: _, ...userWithoutPassword } = createdUser;
-    setCurrentUser(userWithoutPassword);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(userWithoutPassword));
-
-    return { success: true };
   };
 
   const logout = () => {
     setCurrentUser(null);
     localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(AUTH_TOKEN_STORAGE_KEY);
   };
 
   const value: AuthContextType = {
@@ -109,11 +110,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     logout,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {

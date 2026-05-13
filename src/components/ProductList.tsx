@@ -1,4 +1,4 @@
-import type { Book, BookId } from "../mock/mockDB";
+import type { Book, BookId } from "../types/catalog";
 import ProductCard from "./ProductCard";
 import styles from "./ProductList.module.css";
 

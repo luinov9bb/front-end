@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import styles from "./Login.module.css";
@@ -11,9 +11,13 @@ function Login() {
   const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
-  // Redirect if already logged in
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/", { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
+
   if (isAuthenticated) {
-    navigate("/");
     return null;
   }
 
@@ -41,13 +45,13 @@ function Login() {
 
         <form onSubmit={handleSubmit}>
           <div className={styles.formGroup}>
-            <label htmlFor="username">Имя пользователя</label>
+            <label htmlFor="username">Логин или email</label>
             <input
               id="username"
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="Введите имя пользователя"
+              placeholder="Имя пользователя или email"
               disabled={loading}
               required
             />
@@ -74,10 +78,11 @@ function Login() {
         </form>
 
         <div className={styles.testCredentials}>
-          <p>Тестовые учетные данные:</p>
+          <p>Тестовые учетные данные (сид в appsettings):</p>
           <ul>
-            <li><strong>Админ:</strong> admin / admin123</li>
-            <li><strong>Юзер:</strong> johndoe / password123</li>
+            <li>
+              <strong>Админ:</strong> admin / Admin123!
+            </li>
           </ul>
         </div>
 
