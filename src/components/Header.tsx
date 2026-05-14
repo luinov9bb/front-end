@@ -80,8 +80,11 @@ function Header({ favoritesCount, cartCount }: HeaderProps) {
 
         {isAuthenticated && currentUser ? (
           <div className={styles.userSection}>
+            <Link to="/profile" className={styles.profileLink}>
+              Профиль
+            </Link>
             <span className={styles.username}>{currentUser.username}</span>
-            <button 
+            <button
               className={styles.logoutButton}
               onClick={handleLogout}
               type="button"
@@ -173,8 +176,11 @@ function Header({ favoritesCount, cartCount }: HeaderProps) {
 
         {isAuthenticated && currentUser ? (
           <div className={styles.mobileUserSection}>
+            <Link to="/profile" className={styles.mobileProfileLink} onClick={closeMobileMenu}>
+              Профиль
+            </Link>
             <span className={styles.mobileUsername}>{currentUser.username}</span>
-            <button 
+            <button
               className={styles.mobileLogoutButton}
               onClick={handleLogout}
               type="button"

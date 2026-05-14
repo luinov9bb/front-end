@@ -12,6 +12,7 @@ type FavoriteEntry = {
 type FavoritesContextType = {
   favoriteIds: Set<BookId>;
   toggleFavorite: (productId: BookId) => void;
+  refreshFavorites: () => Promise<void>;
 };
 
 const FavoritesContext = createContext<FavoritesContextType | undefined>(undefined);
@@ -92,7 +93,7 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <FavoritesContext.Provider value={{ favoriteIds, toggleFavorite }}>
+    <FavoritesContext.Provider value={{ favoriteIds, toggleFavorite, refreshFavorites }}>
       {children}
     </FavoritesContext.Provider>
   );

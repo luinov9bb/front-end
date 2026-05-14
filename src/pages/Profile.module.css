@@ -1,20 +1,203 @@
-.container {
-  padding: 40px 20px;
-  text-align: center;
-  min-height: 60vh;
+.wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 48px 20px 72px;
   display: flex;
   flex-direction: column;
+  gap: 28px;
+  background: #f5f1e8;
+  min-height: 70vh;
+}
+
+.card,
+.guestCard {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 28px 32px;
+}
+
+.guestCard {
+  text-align: center;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.title {
+  margin: 0 0 16px;
+  font-family: "Cormorant Garamond", "Times New Roman", serif;
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  color: #25352b;
+}
+
+.sectionTitle {
+  margin: 0 0 18px;
+  font-family: "Cormorant Garamond", "Times New Roman", serif;
+  font-size: 1.5rem;
+  color: #25352b;
+}
+
+.lead {
+  margin: 0 0 24px;
+  font-family: "Gill Sans", "Trebuchet MS", sans-serif;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
   justify-content: center;
-  align-items: center;
 }
 
-h1 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  color: #333;
+.primaryBtn,
+.secondaryBtn {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 999px;
+  font-family: "Gill Sans", "Trebuchet MS", sans-serif;
+  text-decoration: none;
+  font-weight: 600;
 }
 
-p {
+.primaryBtn {
+  background: #4d6653;
+  color: #ffffff;
+}
+
+.secondaryBtn {
+  border: 1px solid #4d6653;
+  color: #25352b;
+}
+
+.dl {
+  margin: 0;
+  display: grid;
+  gap: 14px;
+}
+
+.dlRow {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 12px;
+  font-family: "Gill Sans", "Trebuchet MS", sans-serif;
+  border-bottom: 1px solid #f3f4f6;
+  padding-bottom: 12px;
+}
+
+.dlRow:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.dlRow dt {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.dlRow dd {
+  margin: 0;
+  color: #1f2937;
+}
+
+.muted {
+  margin: 0;
+  color: #6b7280;
+  font-family: "Gill Sans", "Trebuchet MS", sans-serif;
+}
+
+.error {
+  margin: 0;
+  color: #b91c1c;
+  font-family: "Gill Sans", "Trebuchet MS", sans-serif;
+}
+
+.orderList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.orderCard {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 18px 20px;
+  background: #fafaf9;
+}
+
+.orderHead {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 14px;
+  font-family: "Gill Sans", "Trebuchet MS", sans-serif;
+}
+
+.orderId {
+  font-weight: 700;
+  color: #25352b;
+}
+
+.orderMeta {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.itemList {
+  list-style: none;
+  margin: 0 0 14px;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.itemRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: "Gill Sans", "Trebuchet MS", sans-serif;
+  font-size: 0.95rem;
+}
+
+.itemInfo {
+  flex: 1;
+  min-width: 160px;
+  color: #374151;
+}
+
+.itemQty {
+  color: #6b7280;
+}
+
+.itemPrice {
+  font-weight: 600;
+  color: #25352b;
+}
+
+.orderTotal {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+  font-family: "Gill Sans", "Trebuchet MS", sans-serif;
+  color: #374151;
+}
+
+.orderTotal strong {
   font-size: 1.1rem;
-  color: #666;
+  color: #1f2937;
+}
+
+@media (max-width: 560px) {
+  .dlRow {
+    grid-template-columns: 1fr;
+  }
 }

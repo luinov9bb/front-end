@@ -47,6 +47,30 @@ export async function fetchReviewsByBookId(bookId: number): Promise<Review[]> {
   return list.map((item) => normalizeReview(item as Record<string, unknown>));
 }
 
+export async function fetchAllReviews(): Promise<Review[]> {
+  const list = await apiFetch<unknown>("/api/Reviews");
+  if (!Array.isArray(list)) {
+    return [];
+  }
+  return list.map((item) => normalizeReview(item as Record<string, unknown>));
+}
+
+export async function adminSetReviewApprovalRequest(payload: {
+  id: number;
+  isApproved: boolean;
+}): Promise<ResponceMsg> {
+  return apiFetch<ResponceMsg>("/api/Reviews/approval", {
+    method: "PUT",
+    jsonBody: { id: payload.id, isApproved: payload.isApproved },
+  });
+}
+
+export async function adminDeleteReviewRequest(reviewId: number): Promise<ResponceMsg> {
+  return apiFetch<ResponceMsg>(`/api/Reviews/admin/${reviewId}`, {
+    method: "DELETE",
+  });
+}
+
 export async function createReview(payload: {
   userId: number;
   bookId: number;

@@ -19,16 +19,9 @@ const STORAGE_KEY = "bookstore_current_user";
 
 function readApiErrorMessage(error: unknown): string {
   if (error instanceof ApiError) {
-    const body = error.body;
-    if (typeof body === "object" && body !== null && "message" in body) {
-      const m = (body as { message: unknown }).message;
-      if (typeof m === "string" && m.trim()) {
-        return m;
-      }
-    }
-    return error.message;
+    return error.message
   }
-  return "Неизвестная ошибка";
+  return "Неизвестная ошибка"
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {

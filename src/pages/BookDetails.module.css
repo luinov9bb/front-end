@@ -383,6 +383,14 @@
   color: #4b5563;
 }
 
+.reviewModerationHint {
+  margin: 0 0 14px;
+  font-family: "Gill Sans", "Trebuchet MS", sans-serif;
+  font-size: 0.88rem;
+  color: #6b7280;
+  line-height: 1.45;
+}
+
 .price {
   margin: 0 0 16px;
   font-family: "Cormorant Garamond", "Times New Roman", serif;

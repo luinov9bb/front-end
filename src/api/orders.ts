@@ -17,6 +17,35 @@ export async function fetchOrdersByUser(userId: number): Promise<OrderDto[]> {
   return list.map((row) => normalizeOrder(row as Record<string, unknown>));
 }
 
+export async function fetchAllOrders(): Promise<OrderDto[]> {
+  const list = await apiFetch<unknown>("/api/Orders");
+  if (!Array.isArray(list)) {
+    return [];
+  }
+  return list.map((row) => normalizeOrder(row as Record<string, unknown>));
+}
+
+export async function adminUpdateOrderStatusRequest(order: OrderDto, nextStatus: number): Promise<ResponceMsg> {
+  return apiFetch<ResponceMsg>("/api/Orders", {
+    method: "PUT",
+    jsonBody: {
+      id: order.id,
+      userId: order.userId,
+      items: [],
+      orderDate: order.orderDate,
+      total: order.total,
+      status: nextStatus,
+      isDeleted: order.isDeleted,
+    },
+  });
+}
+
+export async function adminDeleteOrderRequest(orderId: number): Promise<ResponceMsg> {
+  return apiFetch<ResponceMsg>(`/api/Orders/${orderId}`, {
+    method: "DELETE",
+  });
+}
+
 function normalizeOrder(r: Record<string, unknown>): OrderDto {
   const itemsRaw = r.items ?? r.Items;
   const items = Array.isArray(itemsRaw)

@@ -63,13 +63,32 @@ function parseResponsePayload(text: string, contentType: string | null, httpStat
 function pickErrorMessage(status: number, statusText: string, data: unknown): string {
   if (typeof data === 'object' && data !== null) {
     const record = data as Record<string, unknown>
-    const msg = record.message ?? record.title
-    if (typeof msg === 'string' && msg.trim()) {
-      return msg
+
+    const directMsg = record.message
+    if (typeof directMsg === 'string' && directMsg.trim()) {
+      return directMsg.trim()
+    }
+
+    const errorsRaw = record.errors
+    if (errorsRaw && typeof errorsRaw === 'object') {
+      const errorsObj = errorsRaw as Record<string, unknown>
+      for (const [field, val] of Object.entries(errorsObj)) {
+        if (Array.isArray(val) && val.length > 0) {
+          const first = val[0]
+          if (typeof first === 'string' && first.trim()) {
+            return `${field}: ${first.trim()}`
+          }
+        }
+      }
+    }
+
+    const title = record.title
+    if (typeof title === 'string' && title.trim()) {
+      return title.trim()
     }
   }
   if (typeof data === 'string' && data.trim()) {
-    return data
+    return data.trim()
   }
   return statusText || `HTTP ${status}`
 }

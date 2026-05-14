@@ -11,8 +11,281 @@
   padding: 40px;
   border-radius: 12px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  max-width: 1000px;
+  max-width: 1200px;
   width: 100%;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.tab,
+.tabActive {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-family: 'Crimson Text', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 2px solid #8B3A3A;
+  background: #fff;
+  color: #8B3A3A;
+  transition: background 0.2s, color 0.2s;
+}
+
+.tab:hover {
+  background: #faf5f5;
+}
+
+.tabActive {
+  background: #8B3A3A;
+  color: #fff;
+}
+
+.noticeSuccess {
+  color: #2d6a2d;
+  margin: 0 0 12px 0;
+  font-size: 0.95rem;
+}
+
+.noticeError {
+  color: #b00020;
+  margin: 0 0 12px 0;
+  font-size: 0.95rem;
+}
+
+.sectionHeading {
+  font-size: 1.6rem;
+  margin: 24px 0 16px 0;
+  color: #333;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #8B3A3A;
+}
+
+.inlineError {
+  color: #b00020;
+  margin: 0 0 12px 0;
+}
+
+.muted {
+  color: #666;
+  margin: 0 0 12px 0;
+}
+
+.tableWrap {
+  overflow-x: auto;
+  margin-bottom: 28px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+.dataTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.dataTable th,
+.dataTable td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.dataTable th {
+  background: #f5f5f5;
+  font-weight: 600;
+  color: #333;
+}
+
+.dataTable tbody tr:hover {
+  background: #fafafa;
+}
+
+.cellMuted {
+  color: #666;
+  max-width: 200px;
+  word-break: break-word;
+}
+
+.reviewTextCell {
+  max-width: 280px;
+  word-break: break-word;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.rowActions {
+  white-space: nowrap;
+}
+
+.linkButton {
+  margin-right: 8px;
+  padding: 6px 10px;
+  background: none;
+  border: none;
+  color: #8B3A3A;
+  font-family: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.dangerButton {
+  padding: 6px 10px;
+  background: none;
+  border: none;
+  color: #b00020;
+  font-family: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.formTitle {
+  margin: 0 0 16px 0;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.checkboxLabel {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  color: #444;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.fieldWide {
+  grid-column: 1 / -1;
+}
+
+.fieldHint {
+  font-size: 0.8rem;
+  color: #777;
+  line-height: 1.4;
+}
+
+.input,
+.textarea {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.formActions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.primaryButton {
+  padding: 12px 24px;
+  background: #8B3A3A;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Crimson Text', serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.primaryButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.secondaryButton {
+  padding: 12px 24px;
+  background: #fff;
+  color: #333;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Crimson Text', serif;
+}
+
+.orderDetails summary {
+  cursor: pointer;
+  color: #8B3A3A;
+  font-size: 0.9rem;
+}
+
+.orderItems {
+  margin: 8px 0 0 0;
+  padding-left: 18px;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.orderStatusControl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.selectCompact {
+  min-width: 150px;
+  max-width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  background: #fff;
+}
+
+.smallPrimaryButton {
+  padding: 6px 12px;
+  background: #8b3a3a;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: "Crimson Text", serif;
+}
+
+.smallPrimaryButton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 .errorBox {
@@ -46,72 +319,8 @@ h1 {
   margin: 0 0 32px 0;
 }
 
-h2 {
-  font-size: 1.8rem;
-  margin: 32px 0 24px 0;
-  color: #333;
-  padding-bottom: 12px;
-  border-bottom: 2px solid #8B3A3A;
-}
-
 .section {
   margin-bottom: 40px;
-}
-
-.menuGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-}
-
-.menuItem {
-  background: #f9f9f9;
-  padding: 24px;
-  border-radius: 8px;
-  border: 1px solid #E0E0E0;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.menuItem:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-}
-
-.menuItem h3 {
-  margin: 0 0 12px 0;
-  font-size: 1.3rem;
-  color: #333;
-}
-
-.menuItem p {
-  margin: 0 0 16px 0;
-  color: #666;
-  font-size: 0.95rem;
-  line-height: 1.5;
-}
-
-.comingSoon {
-  padding: 10px 16px;
-  background: #ddd;
-  color: #666;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  font-family: 'Crimson Text', serif;
-  cursor: not-allowed;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-weight: 600;
-  width: 100%;
-}
-
-.stats {
-  background: #f9f9f9;
-  padding: 24px;
-  border-radius: 8px;
-  border: 1px solid #E0E0E0;
-  color: #666;
-  font-size: 1rem;
 }
 
 .backButton {
@@ -143,12 +352,8 @@ h2 {
     font-size: 2rem;
   }
 
-  h2 {
-    font-size: 1.5rem;
-  }
-
-  .menuGrid {
-    grid-template-columns: 1fr;
+  .sectionHeading {
+    font-size: 1.4rem;
   }
 }
 
@@ -165,7 +370,7 @@ h2 {
     font-size: 1.5rem;
   }
 
-  h2 {
-    font-size: 1.3rem;
+  .sectionHeading {
+    font-size: 1.25rem;
   }
 }

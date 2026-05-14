@@ -269,6 +269,10 @@ function BookDetails() {
                       )}
                     </div>
 
+                    <p className={styles.reviewModerationHint}>
+                      Отзывы на странице книги показываются после одобрения администратором.
+                    </p>
+
                     <div className={styles.reviewList}>
                       {reviews.length === 0 ? (
                         <p className={styles.emptyMessage}>Никто еще не оставил отзыв. Станьте первым!</p>
