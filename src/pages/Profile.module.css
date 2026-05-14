@@ -1,12 +1,19 @@
 .wrap {
-  max-width: 900px;
+  max-width: min(1360px, calc(100vw - 24px));
   margin: 0 auto;
-  padding: 48px 20px 72px;
+  padding: clamp(28px, 4vw, 48px) clamp(14px, 2.5vw, 28px) clamp(40px, 5vw, 64px);
   display: flex;
   flex-direction: column;
   gap: 28px;
   background: #f5f1e8;
   min-height: 70vh;
+  box-sizing: border-box;
+}
+
+.wrap > section {
+  padding: 0;
+  margin: 0;
+  background: transparent;
 }
 
 .card,
@@ -15,6 +22,11 @@
   border: 1px solid #e5e7eb;
   border-radius: 16px;
   padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .guestCard {
@@ -24,14 +36,16 @@
 }
 
 .title {
-  margin: 0 0 16px;
+  margin: 0 0 20px;
+  width: 100%;
   font-family: "Cormorant Garamond", "Times New Roman", serif;
   font-size: clamp(1.8rem, 3vw, 2.4rem);
   color: #25352b;
 }
 
 .sectionTitle {
-  margin: 0 0 18px;
+  margin: 0 0 16px;
+  width: 100%;
   font-family: "Cormorant Garamond", "Times New Roman", serif;
   font-size: 1.5rem;
   color: #25352b;
@@ -106,6 +120,16 @@
   margin: 0;
   color: #6b7280;
   font-family: "Gill Sans", "Trebuchet MS", sans-serif;
+}
+
+.emptyOrders {
+  margin: 12px 0 0;
+  padding: 20px 16px;
+  text-align: center;
+  color: #6b7280;
+  font-family: "Gill Sans", "Trebuchet MS", sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 .error {

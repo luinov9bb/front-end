@@ -8,11 +8,12 @@
 
 .adminPanel {
   background: #FFFFFF;
-  padding: 40px;
+  padding: clamp(20px, 3vw, 40px);
   border-radius: 12px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  max-width: 1200px;
+  max-width: min(1400px, 100%);
   width: 100%;
+  box-sizing: border-box;
 }
 
 .tabs {
@@ -77,9 +78,13 @@
 
 .tableWrap {
   overflow-x: auto;
-  margin-bottom: 28px;
+  margin-bottom: 16px;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
+}
+
+.splitMain .tableWrap {
+  margin-bottom: 0;
 }
 
 .dataTable {
@@ -321,6 +326,63 @@ h1 {
 
 .section {
   margin-bottom: 40px;
+  width: 100%;
+  display: block;
+  box-sizing: border-box;
+  padding: 0;
+  margin-left: 0;
+  margin-right: 0;
+  background: transparent;
+}
+
+.sectionIntro {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.sectionIntro .sectionHeading {
+  margin-top: 0;
+}
+
+.sectionLead {
+  margin: 0 0 12px;
+  max-width: 72ch;
+  color: #555;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.splitLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 380px);
+  gap: clamp(16px, 2.5vw, 28px);
+  align-items: start;
+  width: 100%;
+}
+
+.splitMain {
+  min-width: 0;
+}
+
+.splitAside {
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid #e8e8e8;
+  border-radius: 10px;
+  background: #fafafa;
+  box-sizing: border-box;
+}
+
+.splitAside .formGrid {
+  grid-template-columns: 1fr;
+}
+
+.splitAside .formTitle {
+  margin-top: 0;
+}
+
+.splitFull {
+  width: 100%;
 }
 
 .backButton {
@@ -341,6 +403,12 @@ h1 {
 .backButton:hover {
   background: #7a3333;
   transform: translateY(-2px);
+}
+
+@media (max-width: 1024px) {
+  .splitLayout {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 768px) {

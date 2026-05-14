@@ -67,8 +67,6 @@ function Home() {
     },
   ];
 
-  const coverSrc = (b: Book) => b.coverImageUrl ?? "";
-
   return (
     <div className={homeStyles.contentPanel}>
       <Carousel slides={carouselSlides} autoPlay={true} autoPlayInterval={5000} />
@@ -85,12 +83,17 @@ function Home() {
               const isFavorite = Array.from(favoriteIds).some(
                 (favoriteId) => String(favoriteId) === String(book.id),
               );
+              const imgSrc = (book.coverImageUrl ?? "").trim();
 
               return (
                 <div key={String(book.id)} className={homeStyles.bookCard}>
                   <div className={homeStyles.bookImageContainer}>
                     <Link to={`/books/${book.id}`}>
-                      <img src={coverSrc(book)} alt={book.title} className={homeStyles.bookImage} />
+                      {imgSrc ? (
+                        <img src={imgSrc} alt={book.title} className={homeStyles.bookImage} />
+                      ) : (
+                        <div className={homeStyles.bookImagePlaceholder}>Нет обложки</div>
+                      )}
                     </Link>
                     <button
                       className={homeStyles.favoriteButton}

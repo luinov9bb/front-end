@@ -89,20 +89,23 @@ function Catalog() {
           <FilterButtons categories={categories} selectedCategory={category} setCategory={setCategory} />
         </aside>
         <main className={styles.content}>
-          <section id="catalog">
-            <Counter count={filteredBooks.length} />
-          </section>
-
           {filteredBooks.length === 0 ? (
-            <section className={`${stateMessageStyles.stateMessage} ${stateMessageStyles.empty}`}>
-              <p>Ничего не найдено</p>
-            </section>
+            <div id="catalog" className={styles.emptyCatalog} role="status" aria-live="polite">
+              <Counter count={0} centered />
+              <p className={styles.emptyCatalogMsg}>Ничего не найдено</p>
+              <p className={styles.emptyCatalogHint}>Попробуйте изменить поиск или категорию.</p>
+            </div>
           ) : (
-            <ProductList
-              products={filteredBooks}
-              favoriteIds={favoriteIds}
-              onToggleFavorite={toggleFavorite}
-            />
+            <>
+              <section id="catalog">
+                <Counter count={filteredBooks.length} centered />
+              </section>
+              <ProductList
+                products={filteredBooks}
+                favoriteIds={favoriteIds}
+                onToggleFavorite={toggleFavorite}
+              />
+            </>
           )}
         </main>
       </div>

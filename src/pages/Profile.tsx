@@ -115,9 +115,7 @@ function Profile() {
         <h2 className={styles.sectionTitle}>Мои заказы</h2>
         {loading && <p className={styles.muted}>Загрузка…</p>}
         {error && <p className={styles.error}>{error}</p>}
-        {!loading && !error && orders.length === 0 && (
-          <p className={styles.muted}>Пока нет заказов.</p>
-        )}
+        {!loading && !error && orders.length === 0 && <p className={styles.emptyOrders}>Пока нет заказов.</p>}
         {!loading && orders.length > 0 && (
           <ul className={styles.orderList}>
             {orders.map((order) => (

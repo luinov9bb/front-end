@@ -12,12 +12,14 @@ type ProductCardProps = {
 function ProductCard({ product, isFavorite, onToggleFavorite }: ProductCardProps) {
   const { addToCart } = useCart();
 
+  const coverSrc = product.coverImageUrl?.trim() ?? "";
+
   const handleAddToCart = () => {
     addToCart({
       id: product.id,
       name: product.title,
       price: product.price,
-      image: product.coverImageUrl ?? "",
+      image: coverSrc,
       quantity: 1,
     });
   };
@@ -66,7 +68,13 @@ function ProductCard({ product, isFavorite, onToggleFavorite }: ProductCardProps
       </button>
 
       <Link to={`/books/${product.id}`} className={styles.cardLink}>
-        <img src={product.coverImageUrl ?? ""} alt={product.title} />
+        <div className={styles.media}>
+          {coverSrc ? (
+            <img src={coverSrc} alt={product.title} loading="lazy" decoding="async" />
+          ) : (
+            <div className={styles.noCover}>Нет обложки</div>
+          )}
+        </div>
         <h3 className={styles.cardTitle} title={product.title}>
           {product.title}
         </h3>

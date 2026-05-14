@@ -1,15 +1,19 @@
-header {
-  display: grid;
-  grid-template-columns: auto auto 1fr;
+.header {
+  display: flex;
   align-items: center;
-  padding: clamp(8px, 2vw, 16px) clamp(12px, 3vw, 24px);
-  background: #FFFFFF;
+  gap: clamp(8px, 1.2vw, 14px);
+  padding: clamp(8px, 1.5vw, 12px) clamp(10px, 1.8vw, 16px);
+  background: #ffffff;
   color: #333333;
   position: sticky;
   top: 0;
   z-index: 1000;
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
-  gap: clamp(12px, 2vw, 20px);
+  flex-wrap: nowrap;
+  min-height: 52px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
 }
 
 .brand {
@@ -18,6 +22,7 @@ header {
   text-decoration: none;
   cursor: pointer;
   transition: transform 0.2s ease;
+  flex-shrink: 0;
 }
 
 .brand:hover {
@@ -43,67 +48,87 @@ header {
   display: none;
 }
 
-.actions {
+.mainNav {
+  flex: 1 1 0;
   display: flex;
   align-items: center;
-  gap: clamp(8px, 1.5vw, 16px);
+  justify-content: center;
+  gap: clamp(4px, 0.8vw, 8px);
   flex-wrap: nowrap;
-  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
 }
 
-nav {
+.mainNav::-webkit-scrollbar {
+  height: 4px;
+}
+
+.mainNav::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+.trailing {
   display: flex;
   align-items: center;
-  gap: clamp(4px, 1vw, 8px);
+  gap: clamp(6px, 1vw, 12px);
   flex-shrink: 0;
-  flex: 1 0 auto;
+  flex-wrap: nowrap;
+  margin-left: auto;
 }
 
-nav a {
-  margin-left: 0;
-  color: #FFFFFF;
+.navLink {
+  margin: 0;
+  color: #ffffff;
   text-decoration: none;
-  font-size: clamp(14px, 1.6vw, 16px);
+  font-size: clamp(12px, 1.25vw, 15px);
   font-weight: 700;
   font-family: 'Crimson Text', serif;
-  padding: clamp(8px, 1.2vw, 12px) clamp(14px, 2vw, 18px);
+  padding: clamp(6px, 0.9vw, 10px) clamp(10px, 1.4vw, 14px);
   background: #666666;
   border-radius: 999px;
   transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   white-space: nowrap;
-  min-height: 44px;
+  min-height: 40px;
+  box-sizing: border-box;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.06em;
+  flex-shrink: 0;
 }
 
-nav a:hover {
+.navLink:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   background: #555555;
+  color: #ffffff;
 }
 
 .cartButton {
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: clamp(6px, 1.2vw, 10px);
-  padding: clamp(8px, 1.2vw, 12px) clamp(12px, 1.8vw, 16px);
+  gap: clamp(4px, 0.9vw, 8px);
+  padding: clamp(6px, 0.9vw, 10px) clamp(10px, 1.4vw, 14px);
   border-radius: 999px;
-  border: 1px solid #E0E0E0;
-  background: #F0F0F0;
+  border: 1px solid #e0e0e0;
+  background: #f0f0f0;
   color: #333333;
   cursor: pointer;
-  font-size: clamp(14px, 1.5vw, 16px);
+  font-size: clamp(12px, 1.2vw, 15px);
   font-family: 'Crimson Text', serif;
   white-space: nowrap;
   transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease;
-  min-height: 44px;
+  min-height: 40px;
   font-weight: 600;
   flex-shrink: 0;
   text-transform: uppercase;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.06em;
 }
 
 .cartButton:hover {
@@ -243,42 +268,37 @@ nav a:hover {
 
 /* Tablet devices - show hamburger, hide full nav */
 @media (max-width: 900px) {
-  header {
-    grid-template-columns: auto auto 1fr;
-  }
-
-  .actions {
+  .mainNav,
+  .trailing {
     display: none;
   }
 
   .hamburger {
     display: flex;
+    margin-left: auto;
   }
 }
 
 /* Smaller tablets and large phones */
 @media (max-width: 680px) {
-  header {
-    grid-template-columns: auto auto 1fr;
-  }
-
   .brand h1 {
     font-size: clamp(0.9rem, 2vw, 1.1rem);
   }
 
-  .actions {
+  .mainNav,
+  .trailing {
     display: none;
   }
 
   .hamburger {
     display: flex;
+    margin-left: auto;
   }
 }
 
 /* Mobile devices */
 @media (max-width: 480px) {
-  header {
-    grid-template-columns: auto 1fr auto;
+  .header {
     padding: 8px 12px;
     gap: 8px;
   }
@@ -292,12 +312,14 @@ nav a:hover {
     display: none;
   }
 
-  .actions {
+  .mainNav,
+  .trailing {
     display: none;
   }
 
   .hamburger {
     display: flex;
+    margin-left: auto;
   }
 
   .hamburger span {
@@ -309,45 +331,39 @@ nav a:hover {
   display: flex;
   align-items: center;
   gap: clamp(8px, 1.5vw, 12px);
-  margin-left: auto;
   flex-shrink: 0;
 }
 
-.profileLink {
-  color: #4d6653;
-  font-weight: 600;
-  font-size: clamp(14px, 1.5vw, 16px);
-  font-family: "Crimson Text", serif;
-  text-decoration: none;
+.userChip {
+  max-width: min(160px, 28vw);
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.profileLink:hover {
-  text-decoration: underline;
-}
-
-.username {
+  padding: clamp(6px, 1vw, 10px) clamp(10px, 1.5vw, 14px);
+  border-radius: 999px;
+  border: 1px solid #e0e0e0;
+  background: #f7f7f7;
   color: #333333;
-  font-size: clamp(14px, 1.5vw, 16px);
+  font-size: clamp(13px, 1.4vw, 15px);
   font-weight: 600;
   font-family: 'Crimson Text', serif;
 }
 
 .logoutButton {
-  padding: clamp(8px, 1.2vw, 12px) clamp(14px, 2vw, 18px);
+  padding: clamp(6px, 0.9vw, 10px) clamp(10px, 1.4vw, 14px);
   border-radius: 999px;
-  border: 1px solid #E0E0E0;
-  background: #F0F0F0;
+  border: 1px solid #e0e0e0;
+  background: #f0f0f0;
   color: #333333;
   cursor: pointer;
-  font-size: clamp(14px, 1.5vw, 16px);
+  font-size: clamp(12px, 1.2vw, 15px);
   font-family: 'Crimson Text', serif;
   white-space: nowrap;
   transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease;
-  min-height: 44px;
+  min-height: 40px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.06em;
 }
 
 .logoutButton:hover {
@@ -359,23 +375,22 @@ nav a:hover {
 
 .userDropdown {
   position: relative;
-  margin-left: auto;
 }
 
 .userMenuButton {
-  padding: clamp(8px, 1.2vw, 12px) clamp(14px, 2vw, 18px);
+  padding: clamp(6px, 0.9vw, 10px) clamp(10px, 1.4vw, 14px);
   border-radius: 999px;
-  background: #8B3A3A;
-  color: #FFFFFF;
+  background: #8b3a3a;
+  color: #ffffff;
   cursor: pointer;
-  font-size: clamp(14px, 1.5vw, 16px);
+  font-size: clamp(12px, 1.2vw, 15px);
   font-family: 'Crimson Text', serif;
   white-space: nowrap;
   transition: all 0.2s ease;
-  min-height: 44px;
+  min-height: 40px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.06em;
   border: none;
   display: flex;
   align-items: center;
@@ -437,25 +452,44 @@ nav a:hover {
   padding: clamp(14px, 3.5vw, 20px) clamp(16px, 3vw, 24px);
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 12px;
-  border-bottom: 1px solid #F0F0F0;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .mobileProfileLink {
-  color: #4d6653;
-  font-weight: 600;
-  font-size: clamp(16px, 2.2vw, 18px);
-  font-family: "Crimson Text", serif;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(8px, 1.2vw, 12px) clamp(14px, 2vw, 18px);
+  border-radius: 999px;
+  background: #666666;
+  color: #ffffff !important;
+  font-weight: 700;
+  font-size: clamp(14px, 1.8vw, 16px);
+  font-family: 'Crimson Text', serif;
   text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  text-align: center;
 }
 
 .mobileProfileLink:hover {
-  text-decoration: underline;
+  background: #555555;
+  color: #ffffff !important;
 }
 
 .mobileUsername {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: clamp(6px, 1vw, 10px) clamp(10px, 1.5vw, 14px);
+  border-radius: 999px;
+  border: 1px solid #e0e0e0;
+  background: #f7f7f7;
   color: #333333;
-  font-size: clamp(16px, 2.2vw, 18px);
+  font-size: clamp(14px, 1.8vw, 16px);
   font-weight: 600;
   font-family: 'Crimson Text', serif;
 }

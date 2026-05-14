@@ -59,6 +59,32 @@
   min-width: 0;
 }
 
+.emptyCatalog {
+  width: 100%;
+  box-sizing: border-box;
+  padding: clamp(24px, 4vw, 48px) clamp(16px, 3vw, 32px);
+  text-align: center;
+  background: #d8d8d8;
+}
+
+.emptyCatalogMsg {
+  margin: 0 0 8px;
+  font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+  font-weight: 600;
+  font-family: "Crimson Text", serif;
+  color: #4b5563;
+}
+
+.emptyCatalogHint {
+  margin: 0;
+  font-size: clamp(0.9rem, 1.6vw, 1rem);
+  font-family: "Crimson Text", serif;
+  color: #6b7280;
+  max-width: 36ch;
+  margin-inline: auto;
+  line-height: 1.45;
+}
+
 @media (max-width: 1000px) {
   .catalogRow {
     gap: clamp(10px, 1.5vw, 20px);

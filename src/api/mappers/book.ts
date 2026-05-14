@@ -14,11 +14,25 @@ function readBool(v: unknown): boolean {
   return Boolean(v);
 }
 
-function readNullableStr(v: unknown): string | null {
-  if (v == null) {
-    return null;
+function readCoverUrl(r: Record<string, unknown>): string | null {
+  const keys = [
+    "coverImageUrl",
+    "CoverImageUrl",
+    "coverUrl",
+    "CoverUrl",
+    "imageUrl",
+    "ImageUrl",
+  ] as const;
+  for (const k of keys) {
+    const v = r[k];
+    if (typeof v === "string") {
+      const t = v.trim();
+      if (t.length > 0) {
+        return t;
+      }
+    }
   }
-  return typeof v === "string" ? v : null;
+  return null;
 }
 
 export function mapApiBookToBook(dto: ApiBookDto): Book {
@@ -32,6 +46,6 @@ export function mapApiBookToBook(dto: ApiBookDto): Book {
     price: readNum(r.price ?? r.Price),
     stock: readNum(r.stock ?? r.Stock),
     isDeleted: readBool(r.isDeleted ?? r.IsDeleted),
-    coverImageUrl: readNullableStr(r.coverImageUrl ?? r.CoverImageUrl),
+    coverImageUrl: readCoverUrl(r),
   };
 }

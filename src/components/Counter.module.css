@@ -1,4 +1,4 @@
-p {
+.p {
   margin: 0;
   padding: 0 0 clamp(12px, 2vw, 16px) 0;
   font-size: clamp(16px, 1.8vw, 18px);
@@ -6,4 +6,10 @@ p {
   font-weight: 600;
   color: #333333;
   letter-spacing: 0.5px;
+}
+
+.pCenter {
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
 }

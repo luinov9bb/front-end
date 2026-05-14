@@ -64,6 +64,22 @@
   transition: transform 0.3s ease;
 }
 
+.bookImagePlaceholder {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  box-sizing: border-box;
+  color: #888888;
+  font-size: 0.95rem;
+  font-family: "Crimson Text", serif;
+  text-align: center;
+  line-height: 1.35;
+}
+
 .bookCard:hover .bookImage {
   transform: scale(1.02);
 }

@@ -97,11 +97,17 @@ function Favorites() {
     })();
   };
 
-  const renderBookCard = (book: Book, extra?: { favoriteId?: number }) => (
-    <article key={book.id} className={styles.card}>
-      <Link to={`/books/${book.id}`} className={styles.coverLink}>
-        <img src={book.coverImageUrl ?? ""} alt="" className={styles.cover} />
-      </Link>
+  const renderBookCard = (book: Book, extra?: { favoriteId?: number }) => {
+    const coverSrc = book.coverImageUrl?.trim() ?? "";
+    return (
+      <article key={book.id} className={styles.card}>
+        <Link to={`/books/${book.id}`} className={styles.coverLink}>
+          {coverSrc ? (
+            <img src={coverSrc} alt="" className={styles.cover} />
+          ) : (
+            <div className={styles.coverPlaceholder}>Нет обложки</div>
+          )}
+        </Link>
       <div className={styles.body}>
         <Link to={`/books/${book.id}`} className={styles.titleLink}>
           <h2 className={styles.bookTitle}>{book.title}</h2>
@@ -115,7 +121,8 @@ function Favorites() {
         )}
       </div>
     </article>
-  );
+    );
+  };
 
   if (isAuthenticated) {
     const items = rows

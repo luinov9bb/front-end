@@ -1,4 +1,5 @@
 import { apiFetch } from "./client";
+import type { ResponceMsg } from "./types/authApi";
 
 export interface UserListDto {
   id: number;
@@ -26,4 +27,33 @@ export async function fetchAllUsers(): Promise<UserListDto[]> {
     return [];
   }
   return list.map((row) => normalizeUser(row as Record<string, unknown>));
+}
+
+export type AdminUserUpdatePayload = {
+  id: number;
+  username: string;
+  email: string;
+  role: string;
+  isActive: boolean;
+  newPassword?: string;
+};
+
+export async function adminUpdateUser(payload: AdminUserUpdatePayload): Promise<ResponceMsg> {
+  return apiFetch<ResponceMsg>(`/api/Users/${payload.id}`, {
+    method: "PUT",
+    jsonBody: {
+      id: payload.id,
+      username: payload.username,
+      email: payload.email,
+      role: payload.role,
+      isActive: payload.isActive,
+      newPassword: payload.newPassword?.trim() ? payload.newPassword.trim() : null,
+    },
+  });
+}
+
+export async function adminSoftDeleteUser(id: number): Promise<ResponceMsg> {
+  return apiFetch<ResponceMsg>(`/api/Users/${id}`, {
+    method: "DELETE",
+  });
 }

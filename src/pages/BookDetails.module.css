@@ -28,6 +28,22 @@
   object-fit: cover;
 }
 
+.coverPlaceholder {
+  width: 100%;
+  aspect-ratio: 3 / 4.4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  box-sizing: border-box;
+  background: #e8e4dc;
+  color: #6b7280;
+  font-family: "Gill Sans", "Trebuchet MS", sans-serif;
+  font-size: 0.95rem;
+  text-align: center;
+  line-height: 1.4;
+}
+
 .details {
   display: flex;
   flex-direction: column;

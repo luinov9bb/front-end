@@ -31,29 +31,24 @@ function Header({ favoritesCount, cartCount }: HeaderProps) {
         <h1>BookStore</h1>
       </Link>
 
-      {/* Hamburger menu button */}
-      <button 
-        className={`${styles.hamburger} ${mobileMenuOpen ? styles.active : ''}`}
-        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        aria-label="Меню"
-        aria-expanded={mobileMenuOpen}
-      >
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+      <nav className={styles.mainNav} aria-label="Основное меню">
+        <Link to="/" className={styles.navLink}>
+          Home
+        </Link>
+        <Link to="/catalog" className={styles.navLink}>
+          Catalog
+        </Link>
+        <Link to="/contacts" className={styles.navLink}>
+          Contacts
+        </Link>
+        {isAdmin ? (
+          <Link to="/admin" className={styles.navLink}>
+            Админ-панель
+          </Link>
+        ) : null}
+      </nav>
 
-      {/* Desktop Navigation and Actions */}
-      <div className={styles.actions}>
-        <nav>
-          <Link to="/">Home</Link>
-          <Link to="/catalog">Catalog</Link>
-          <Link to="/contacts">Contacts</Link>
-          {isAdmin && (
-            <Link to="/admin">Админ-панель</Link>
-          )}
-        </nav>
-
+      <div className={styles.trailing}>
         <button className={styles.cartButton} type="button" aria-label="Избранное" onClick={() => navigate("/favorites")}>
           <svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M16.5 3.515c-1.825 0-3.49.9-4.5 2.34a5.495 5.495 0 0 0-4.5-2.34 5.503 5.503 0 0 0-3.89 9.39l8.39 8.39 8.39-8.39a5.503 5.503 0 0 0-3.89-9.39Zm2.83 8.33L12 19.175l-7.33-7.33a3.974 3.974 0 0 1-1.17-2.83c0-2.205 1.795-4 4-4 1.72 0 3.24 1.095 3.79 2.725a.748.748 0 0 0 1.42 0 3.996 3.996 0 0 1 3.79-2.725c2.205 0 4 1.795 4 4 0 1.07-.415 2.075-1.17 2.83Z" fill="#202023"/>
@@ -80,10 +75,10 @@ function Header({ favoritesCount, cartCount }: HeaderProps) {
 
         {isAuthenticated && currentUser ? (
           <div className={styles.userSection}>
-            <Link to="/profile" className={styles.profileLink}>
+            <Link to="/profile" className={styles.navLink} title={currentUser.username}>
               Профиль
             </Link>
-            <span className={styles.username}>{currentUser.username}</span>
+            <span className={styles.userChip}>{currentUser.username}</span>
             <button
               className={styles.logoutButton}
               onClick={handleLogout}
@@ -129,8 +124,19 @@ function Header({ favoritesCount, cartCount }: HeaderProps) {
         )}
       </div>
 
-      {/* Mobile Menu */}
-      <nav className={`${styles.mobileMenu} ${mobileMenuOpen ? styles.open : ''}`}>
+      <button
+        type="button"
+        className={`${styles.hamburger} ${mobileMenuOpen ? styles.active : ""}`}
+        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        aria-label="Меню"
+        aria-expanded={mobileMenuOpen}
+      >
+        <span />
+        <span />
+        <span />
+      </button>
+
+      <nav className={`${styles.mobileMenu} ${mobileMenuOpen ? styles.open : ""}`}>
         <Link to="/" onClick={closeMobileMenu}>Home</Link>
         <svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M19.75 21H14v-5.005a2 2 0 1 0-4 0V21H4.25C3.56 21 3 20.44 3 19.75v-9.315l8.13-7.885a1.24 1.24 0 0 1 1.74 0L21 10.435v9.315c0 .69-.56 1.25-1.25 1.25Zm-4.25-1.5h4v-8.435L12 3.795 4.5 11.07v8.435h4V16c0-1.93 1.57-3.5 3.5-3.5s3.5 1.57 3.5 3.5v3.505-.005Z" fill="#202023"/>

@@ -14,7 +14,7 @@ import {
   fetchCategories,
 } from "../api/categories";
 import { fetchAllOrders, adminUpdateOrderStatusRequest, adminDeleteOrderRequest } from "../api/orders";
-import { fetchAllUsers } from "../api/users";
+import { fetchAllUsers, adminUpdateUser, adminSoftDeleteUser } from "../api/users";
 import { fetchAllReviews, adminSetReviewApprovalRequest, adminDeleteReviewRequest } from "../api/reviews";
 import { ApiError } from "../api/client";
 import type { Book, Review } from "../types/catalog";
@@ -69,6 +69,16 @@ function Admin() {
   const [users, setUsers] = useState<UserListDto[]>([]);
   const [usersLoading, setUsersLoading] = useState(false);
   const [usersError, setUsersError] = useState("");
+  const [usersTabMessage, setUsersTabMessage] = useState("");
+  const [usersTabError, setUsersTabError] = useState("");
+  const [userEditingId, setUserEditingId] = useState<number | null>(null);
+  const [userUsername, setUserUsername] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [userRole, setUserRole] = useState("User");
+  const [userIsActive, setUserIsActive] = useState(true);
+  const [userNewPassword, setUserNewPassword] = useState("");
+  const [userSaving, setUserSaving] = useState(false);
+  const [userActionLoadingId, setUserActionLoadingId] = useState<number | null>(null);
 
   const [orders, setOrders] = useState<OrderDto[]>([]);
   const [ordersLoading, setOrdersLoading] = useState(false);
@@ -478,6 +488,89 @@ function Admin() {
     }
   };
 
+  const refreshUsersList = async () => {
+    const list = await fetchAllUsers();
+    setUsers(list);
+  };
+
+  const resetUserForm = () => {
+    setUserEditingId(null);
+    setUserUsername("");
+    setUserEmail("");
+    setUserRole("User");
+    setUserIsActive(true);
+    setUserNewPassword("");
+    setUsersTabMessage("");
+    setUsersTabError("");
+  };
+
+  const startUserEdit = (u: UserListDto) => {
+    setUserEditingId(u.id);
+    setUserUsername(u.username);
+    setUserEmail(u.email);
+    setUserRole(u.role === "Admin" ? "Admin" : "User");
+    setUserIsActive(u.isActive);
+    setUserNewPassword("");
+    setUsersTabMessage("");
+    setUsersTabError("");
+  };
+
+  const handleSubmitUser = async (e: FormEvent) => {
+    e.preventDefault();
+    if (userEditingId === null) {
+      return;
+    }
+    setUsersTabMessage("");
+    setUsersTabError("");
+    setUserSaving(true);
+    try {
+      const res = await adminUpdateUser({
+        id: userEditingId,
+        username: userUsername.trim(),
+        email: userEmail.trim(),
+        role: userRole,
+        isActive: userIsActive,
+        newPassword: userNewPassword.trim() || undefined,
+      });
+      if (!res.isSuccess) {
+        setUsersTabError(res.message);
+        return;
+      }
+      setUsersTabMessage(res.message);
+      resetUserForm();
+      await refreshUsersList();
+    } catch (err: unknown) {
+      setUsersTabError(err instanceof ApiError ? err.message : "Ошибка запроса.");
+    } finally {
+      setUserSaving(false);
+    }
+  };
+
+  const handleDeactivateUser = async (u: UserListDto) => {
+    if (!window.confirm(`Отключить пользователя «${u.username}»? Вход будет невозможен.`)) {
+      return;
+    }
+    setUsersTabMessage("");
+    setUsersTabError("");
+    setUserActionLoadingId(u.id);
+    try {
+      const res = await adminSoftDeleteUser(u.id);
+      if (!res.isSuccess) {
+        setUsersTabError(res.message);
+        return;
+      }
+      setUsersTabMessage(res.message);
+      if (userEditingId === u.id) {
+        resetUserForm();
+      }
+      await refreshUsersList();
+    } catch (err: unknown) {
+      setUsersTabError(err instanceof ApiError ? err.message : "Ошибка запроса.");
+    } finally {
+      setUserActionLoadingId(null);
+    }
+  };
+
   const refreshOrdersList = async () => {
     const list = await fetchAllOrders();
     setOrders(list);
@@ -651,174 +744,194 @@ function Admin() {
 
         {tab === "books" ? (
           <section className={styles.section} aria-labelledby="admin-books-heading">
-            <h2 id="admin-books-heading" className={styles.sectionHeading}>
-              Каталог
-            </h2>
-            {formMessage ? <p className={styles.noticeSuccess}>{formMessage}</p> : null}
-            {formError ? <p className={styles.noticeError}>{formError}</p> : null}
-            {booksError ? <p className={styles.inlineError}>{booksError}</p> : null}
-            {booksLoading ? <p className={styles.muted}>Загрузка…</p> : null}
-
-            <div className={styles.tableWrap}>
-              <table className={styles.dataTable}>
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Название</th>
-                    <th>Автор</th>
-                    <th>Категории</th>
-                    <th>Цена</th>
-                    <th>Остаток</th>
-                    <th />
-                  </tr>
-                </thead>
-                <tbody>
-                  {books.map((b) => (
-                    <tr key={b.id}>
-                      <td>{b.id}</td>
-                      <td>{b.title}</td>
-                      <td>{b.author}</td>
-                      <td className={styles.cellMuted}>{b.category || "—"}</td>
-                      <td>{b.price.toFixed(2)}</td>
-                      <td>{b.stock}</td>
-                      <td className={styles.rowActions}>
-                        <button type="button" className={styles.linkButton} onClick={() => startEdit(b)}>
-                          Изменить
-                        </button>
-                        <button type="button" className={styles.dangerButton} onClick={() => void handleDeleteBook(b.id)}>
-                          Удалить
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className={styles.sectionIntro}>
+              <h2 id="admin-books-heading" className={styles.sectionHeading}>
+                Каталог
+              </h2>
+              {formMessage ? <p className={styles.noticeSuccess}>{formMessage}</p> : null}
+              {formError ? <p className={styles.noticeError}>{formError}</p> : null}
+              {booksError ? <p className={styles.inlineError}>{booksError}</p> : null}
+              {booksLoading ? <p className={styles.muted}>Загрузка…</p> : null}
             </div>
 
-            <h3 className={styles.formTitle}>{editingId === null ? "Новая книга" : `Редактирование #${editingId}`}</h3>
-            <form className={styles.formGrid} onSubmit={(e) => void handleSubmitBook(e)}>
-              <label className={styles.field}>
-                Название *
-                <input value={title} onChange={(e) => setTitle(e.target.value)} required className={styles.input} />
-              </label>
-              <label className={styles.field}>
-                Автор
-                <input value={author} onChange={(e) => setAuthor(e.target.value)} className={styles.input} />
-              </label>
-              <label className={styles.field}>
-                Категории (через запятую, как в БД)
-                <input value={category} onChange={(e) => setCategory(e.target.value)} className={styles.input} />
-                {categoryHint ? (
-                  <span className={styles.fieldHint}>Пример имён: {categoryHint}</span>
-                ) : null}
-              </label>
-              <label className={styles.field}>
-                Цена *
-                <input value={price} onChange={(e) => setPrice(e.target.value)} inputMode="decimal" className={styles.input} />
-              </label>
-              <label className={styles.field}>
-                Остаток *
-                <input value={stock} onChange={(e) => setStock(e.target.value)} inputMode="numeric" className={styles.input} />
-              </label>
-              <label className={`${styles.field} ${styles.fieldWide}`}>
-                Описание
-                <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={4} className={styles.textarea} />
-              </label>
-              <label className={`${styles.field} ${styles.fieldWide}`}>
-                URL обложки
-                <input value={coverImageUrl} onChange={(e) => setCoverImageUrl(e.target.value)} className={styles.input} />
-              </label>
-              <div className={styles.formActions}>
-                {editingId !== null ? (
-                  <button type="button" className={styles.secondaryButton} onClick={resetForm}>
-                    Отмена
-                  </button>
-                ) : null}
-                <button type="submit" className={styles.primaryButton} disabled={saving}>
-                  {saving ? "Сохранение…" : editingId === null ? "Добавить" : "Сохранить"}
-                </button>
+            <div className={styles.splitLayout}>
+              <div className={styles.splitMain}>
+                <div className={styles.tableWrap}>
+                  <table className={styles.dataTable}>
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Название</th>
+                        <th>Автор</th>
+                        <th>Категории</th>
+                        <th>Цена</th>
+                        <th>Остаток</th>
+                        <th />
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {books.map((b) => (
+                        <tr key={b.id}>
+                          <td>{b.id}</td>
+                          <td>{b.title}</td>
+                          <td>{b.author}</td>
+                          <td className={styles.cellMuted}>{b.category || "—"}</td>
+                          <td>{b.price.toFixed(2)}</td>
+                          <td>{b.stock}</td>
+                          <td className={styles.rowActions}>
+                            <button type="button" className={styles.linkButton} onClick={() => startEdit(b)}>
+                              Изменить
+                            </button>
+                            <button type="button" className={styles.dangerButton} onClick={() => void handleDeleteBook(b.id)}>
+                              Удалить
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </form>
+
+              <aside className={styles.splitAside} aria-label="Форма книги">
+                <h3 className={styles.formTitle}>{editingId === null ? "Новая книга" : `Редактирование #${editingId}`}</h3>
+                <form className={styles.formGrid} onSubmit={(e) => void handleSubmitBook(e)}>
+                  <label className={styles.field}>
+                    Название *
+                    <input value={title} onChange={(e) => setTitle(e.target.value)} required className={styles.input} />
+                  </label>
+                  <label className={styles.field}>
+                    Автор
+                    <input value={author} onChange={(e) => setAuthor(e.target.value)} className={styles.input} />
+                  </label>
+                  <label className={styles.field}>
+                    Категории (через запятую, как в БД)
+                    <input value={category} onChange={(e) => setCategory(e.target.value)} className={styles.input} />
+                    {categoryHint ? (
+                      <span className={styles.fieldHint}>Пример имён: {categoryHint}</span>
+                    ) : null}
+                  </label>
+                  <label className={styles.field}>
+                    Цена *
+                    <input value={price} onChange={(e) => setPrice(e.target.value)} inputMode="decimal" className={styles.input} />
+                  </label>
+                  <label className={styles.field}>
+                    Остаток *
+                    <input value={stock} onChange={(e) => setStock(e.target.value)} inputMode="numeric" className={styles.input} />
+                  </label>
+                  <label className={`${styles.field} ${styles.fieldWide}`}>
+                    Описание
+                    <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={4} className={styles.textarea} />
+                  </label>
+                  <label className={`${styles.field} ${styles.fieldWide}`}>
+                    URL обложки
+                    <input value={coverImageUrl} onChange={(e) => setCoverImageUrl(e.target.value)} className={styles.input} />
+                  </label>
+                  <div className={styles.formActions}>
+                    {editingId !== null ? (
+                      <button type="button" className={styles.secondaryButton} onClick={resetForm}>
+                        Отмена
+                      </button>
+                    ) : null}
+                    <button type="submit" className={styles.primaryButton} disabled={saving}>
+                      {saving ? "Сохранение…" : editingId === null ? "Добавить" : "Сохранить"}
+                    </button>
+                  </div>
+                </form>
+              </aside>
+            </div>
           </section>
         ) : null}
 
         {tab === "categories" ? (
           <section className={styles.section} aria-labelledby="admin-categories-heading">
-            <h2 id="admin-categories-heading" className={styles.sectionHeading}>
-              Категории
-            </h2>
-            {catFormMessage ? <p className={styles.noticeSuccess}>{catFormMessage}</p> : null}
-            {catFormError ? <p className={styles.noticeError}>{catFormError}</p> : null}
-            {categoriesTabError ? <p className={styles.inlineError}>{categoriesTabError}</p> : null}
-            {categoriesTabLoading ? <p className={styles.muted}>Загрузка…</p> : null}
-
-            <div className={styles.tableWrap}>
-              <table className={styles.dataTable}>
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Название</th>
-                    <th>Активна</th>
-                    <th />
-                  </tr>
-                </thead>
-                <tbody>
-                  {categories.map((c) => (
-                    <tr key={c.id}>
-                      <td>{c.id}</td>
-                      <td>{c.name}</td>
-                      <td>{c.isActive ? "да" : "нет"}</td>
-                      <td className={styles.rowActions}>
-                        <button type="button" className={styles.linkButton} onClick={() => startCatEdit(c)}>
-                          Изменить
-                        </button>
-                        <button type="button" className={styles.dangerButton} onClick={() => void handleDeleteCategory(c.id)}>
-                          Удалить
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className={styles.sectionIntro}>
+              <h2 id="admin-categories-heading" className={styles.sectionHeading}>
+                Категории
+              </h2>
+              {catFormMessage ? <p className={styles.noticeSuccess}>{catFormMessage}</p> : null}
+              {catFormError ? <p className={styles.noticeError}>{catFormError}</p> : null}
+              {categoriesTabError ? <p className={styles.inlineError}>{categoriesTabError}</p> : null}
+              {categoriesTabLoading ? <p className={styles.muted}>Загрузка…</p> : null}
             </div>
 
-            <h3 className={styles.formTitle}>{catEditingId === null ? "Новая категория" : `Редактирование #${catEditingId}`}</h3>
-            <form className={styles.formGrid} onSubmit={(e) => void handleSubmitCategory(e)}>
-              <label className={styles.field}>
-                Название *
-                <input value={catName} onChange={(e) => setCatName(e.target.value)} required className={styles.input} />
-              </label>
-              <label className={styles.checkboxLabel}>
-                <input type="checkbox" checked={catActive} onChange={(e) => setCatActive(e.target.checked)} />
-                Активна
-              </label>
-              <div className={styles.formActions}>
-                {catEditingId !== null ? (
-                  <button type="button" className={styles.secondaryButton} onClick={resetCatForm}>
-                    Отмена
-                  </button>
-                ) : null}
-                <button type="submit" className={styles.primaryButton} disabled={catSaving}>
-                  {catSaving ? "Сохранение…" : catEditingId === null ? "Добавить" : "Сохранить"}
-                </button>
+            <div className={styles.splitLayout}>
+              <div className={styles.splitMain}>
+                <div className={styles.tableWrap}>
+                  <table className={styles.dataTable}>
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Название</th>
+                        <th>Активна</th>
+                        <th />
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {categories.map((c) => (
+                        <tr key={c.id}>
+                          <td>{c.id}</td>
+                          <td>{c.name}</td>
+                          <td>{c.isActive ? "да" : "нет"}</td>
+                          <td className={styles.rowActions}>
+                            <button type="button" className={styles.linkButton} onClick={() => startCatEdit(c)}>
+                              Изменить
+                            </button>
+                            <button type="button" className={styles.dangerButton} onClick={() => void handleDeleteCategory(c.id)}>
+                              Удалить
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </form>
+
+              <aside className={styles.splitAside} aria-label="Форма категории">
+                <h3 className={styles.formTitle}>{catEditingId === null ? "Новая категория" : `Редактирование #${catEditingId}`}</h3>
+                <form className={styles.formGrid} onSubmit={(e) => void handleSubmitCategory(e)}>
+                  <label className={styles.field}>
+                    Название *
+                    <input value={catName} onChange={(e) => setCatName(e.target.value)} required className={styles.input} />
+                  </label>
+                  <label className={styles.checkboxLabel}>
+                    <input type="checkbox" checked={catActive} onChange={(e) => setCatActive(e.target.checked)} />
+                    Активна
+                  </label>
+                  <div className={styles.formActions}>
+                    {catEditingId !== null ? (
+                      <button type="button" className={styles.secondaryButton} onClick={resetCatForm}>
+                        Отмена
+                      </button>
+                    ) : null}
+                    <button type="submit" className={styles.primaryButton} disabled={catSaving}>
+                      {catSaving ? "Сохранение…" : catEditingId === null ? "Добавить" : "Сохранить"}
+                    </button>
+                  </div>
+                </form>
+              </aside>
+            </div>
           </section>
         ) : null}
 
         {tab === "reviews" ? (
           <section className={styles.section} aria-labelledby="admin-reviews-heading">
-            <h2 id="admin-reviews-heading" className={styles.sectionHeading}>
-              Отзывы
-            </h2>
-            <p className={styles.muted}>
-              На странице книги видны только одобренные отзывы. Новые сначала остаются «на проверке».
-            </p>
-            {reviewsTabMessage ? <p className={styles.noticeSuccess}>{reviewsTabMessage}</p> : null}
-            {reviewsTabError ? <p className={styles.noticeError}>{reviewsTabError}</p> : null}
-            {reviewsError ? <p className={styles.inlineError}>{reviewsError}</p> : null}
-            {reviewsLoading ? <p className={styles.muted}>Загрузка…</p> : null}
-            <div className={styles.tableWrap}>
+            <div className={styles.sectionIntro}>
+              <h2 id="admin-reviews-heading" className={styles.sectionHeading}>
+                Отзывы
+              </h2>
+              <p className={styles.sectionLead}>
+                На странице книги видны только одобренные отзывы. Новые сначала остаются «на проверке».
+              </p>
+              {reviewsTabMessage ? <p className={styles.noticeSuccess}>{reviewsTabMessage}</p> : null}
+              {reviewsTabError ? <p className={styles.noticeError}>{reviewsTabError}</p> : null}
+              {reviewsError ? <p className={styles.inlineError}>{reviewsError}</p> : null}
+              {reviewsLoading ? <p className={styles.muted}>Загрузка…</p> : null}
+            </div>
+
+            <div className={styles.splitFull}>
+              <div className={styles.tableWrap}>
               <table className={styles.dataTable}>
                 <thead>
                   <tr>
@@ -874,19 +987,24 @@ function Admin() {
                 </tbody>
               </table>
             </div>
+            </div>
           </section>
         ) : null}
 
         {tab === "orders" ? (
           <section className={styles.section} aria-labelledby="admin-orders-heading">
-            <h2 id="admin-orders-heading" className={styles.sectionHeading}>
-              Все заказы
-            </h2>
-            {ordersTabMessage ? <p className={styles.noticeSuccess}>{ordersTabMessage}</p> : null}
-            {ordersTabError ? <p className={styles.noticeError}>{ordersTabError}</p> : null}
-            {ordersError ? <p className={styles.inlineError}>{ordersError}</p> : null}
-            {ordersLoading ? <p className={styles.muted}>Загрузка…</p> : null}
-            <div className={styles.tableWrap}>
+            <div className={styles.sectionIntro}>
+              <h2 id="admin-orders-heading" className={styles.sectionHeading}>
+                Все заказы
+              </h2>
+              {ordersTabMessage ? <p className={styles.noticeSuccess}>{ordersTabMessage}</p> : null}
+              {ordersTabError ? <p className={styles.noticeError}>{ordersTabError}</p> : null}
+              {ordersError ? <p className={styles.inlineError}>{ordersError}</p> : null}
+              {ordersLoading ? <p className={styles.muted}>Загрузка…</p> : null}
+            </div>
+
+            <div className={styles.splitFull}>
+              <div className={styles.tableWrap}>
               <table className={styles.dataTable}>
                 <thead>
                   <tr>
@@ -963,42 +1081,134 @@ function Admin() {
                 </tbody>
               </table>
             </div>
+            </div>
           </section>
         ) : null}
 
         {tab === "users" ? (
           <section className={styles.section} aria-labelledby="admin-users-heading">
-            <h2 id="admin-users-heading" className={styles.sectionHeading}>
-              Пользователи
-            </h2>
-            <p className={styles.muted}>Только просмотр (API не предусматривает редактирование из фронта).</p>
-            {usersError ? <p className={styles.inlineError}>{usersError}</p> : null}
-            {usersLoading ? <p className={styles.muted}>Загрузка…</p> : null}
-            <div className={styles.tableWrap}>
-              <table className={styles.dataTable}>
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Логин</th>
-                    <th>Email</th>
-                    <th>Роль</th>
-                    <th>Регистрация</th>
-                    <th>Активен</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {users.map((u) => (
-                    <tr key={u.id}>
-                      <td>{u.id}</td>
-                      <td>{u.username}</td>
-                      <td>{u.email}</td>
-                      <td>{u.role}</td>
-                      <td>{formatDate(u.registeredOn)}</td>
-                      <td>{u.isActive ? "да" : "нет"}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className={styles.sectionIntro}>
+              <h2 id="admin-users-heading" className={styles.sectionHeading}>
+                Пользователи
+              </h2>
+              <p className={styles.sectionLead}>
+                Редактирование данных и роли; «Отключить» — учётная запись не сможет войти (запись в БД сохраняется).
+              </p>
+              {usersTabMessage ? <p className={styles.noticeSuccess}>{usersTabMessage}</p> : null}
+              {usersTabError ? <p className={styles.noticeError}>{usersTabError}</p> : null}
+              {usersError ? <p className={styles.inlineError}>{usersError}</p> : null}
+              {usersLoading ? <p className={styles.muted}>Загрузка…</p> : null}
+            </div>
+
+            <div className={styles.splitLayout}>
+              <div className={styles.splitMain}>
+                <div className={styles.tableWrap}>
+                  <table className={styles.dataTable}>
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Логин</th>
+                        <th>Email</th>
+                        <th>Роль</th>
+                        <th>Регистрация</th>
+                        <th>Активен</th>
+                        <th />
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {users.map((u) => (
+                        <tr key={u.id}>
+                          <td>{u.id}</td>
+                          <td>{u.username}</td>
+                          <td>{u.email}</td>
+                          <td>{u.role}</td>
+                          <td>{formatDate(u.registeredOn)}</td>
+                          <td>{u.isActive ? "да" : "нет"}</td>
+                          <td className={styles.rowActions}>
+                            <button type="button" className={styles.linkButton} onClick={() => startUserEdit(u)}>
+                              Изменить
+                            </button>
+                            {u.isActive ? (
+                              <button
+                                type="button"
+                                className={styles.dangerButton}
+                                onClick={() => void handleDeactivateUser(u)}
+                                disabled={userActionLoadingId === u.id || currentUser?.id === u.id}
+                              >
+                                Отключить
+                              </button>
+                            ) : null}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <aside className={styles.splitAside} aria-label="Редактирование пользователя">
+                <h3 className={styles.formTitle}>
+                  {userEditingId === null ? "Выберите пользователя" : `Пользователь #${userEditingId}`}
+                </h3>
+                {userEditingId === null ? (
+                  <p className={styles.muted}>Нажмите «Изменить» в таблице.</p>
+                ) : (
+                  <form className={styles.formGrid} onSubmit={(e) => void handleSubmitUser(e)}>
+                    <label className={styles.field}>
+                      Логин *
+                      <input
+                        className={styles.input}
+                        value={userUsername}
+                        onChange={(e) => setUserUsername(e.target.value)}
+                        required
+                        minLength={3}
+                        maxLength={20}
+                      />
+                    </label>
+                    <label className={styles.field}>
+                      Email *
+                      <input
+                        type="email"
+                        className={styles.input}
+                        value={userEmail}
+                        onChange={(e) => setUserEmail(e.target.value)}
+                        required
+                        maxLength={30}
+                      />
+                    </label>
+                    <label className={styles.field}>
+                      Роль *
+                      <select className={styles.input} value={userRole} onChange={(e) => setUserRole(e.target.value)}>
+                        <option value="User">User</option>
+                        <option value="Admin">Admin</option>
+                      </select>
+                    </label>
+                    <label className={styles.checkboxLabel}>
+                      <input type="checkbox" checked={userIsActive} onChange={(e) => setUserIsActive(e.target.checked)} />
+                      Активен (может войти)
+                    </label>
+                    <label className={styles.field}>
+                      Новый пароль (необязательно)
+                      <input
+                        type="password"
+                        className={styles.input}
+                        value={userNewPassword}
+                        onChange={(e) => setUserNewPassword(e.target.value)}
+                        autoComplete="new-password"
+                        placeholder="Оставьте пустым, чтобы не менять"
+                      />
+                    </label>
+                    <div className={styles.formActions}>
+                      <button type="button" className={styles.secondaryButton} onClick={resetUserForm}>
+                        Отмена
+                      </button>
+                      <button type="submit" className={styles.primaryButton} disabled={userSaving}>
+                        {userSaving ? "Сохранение…" : "Сохранить"}
+                      </button>
+                    </div>
+                  </form>
+                )}
+              </aside>
             </div>
           </section>
         ) : null}

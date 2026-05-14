@@ -102,7 +102,7 @@ function BookDetails() {
       id: book.id,
       name: book.title,
       price: book.price,
-      image: book.coverImageUrl ?? "",
+      image: book.coverImageUrl?.trim() ?? "",
       quantity: 1,
     });
   };
@@ -200,13 +200,18 @@ function BookDetails() {
   }
 
   const categoryLine = book.category.trim() || "—";
+  const coverSrc = book.coverImageUrl?.trim() ?? "";
 
   return (
     <section className={styles.page}>
       <div className={styles.panel}>
         <div className={styles.grid}>
           <div className={styles.coverFrame}>
-            <img className={styles.cover} src={book.coverImageUrl ?? ""} alt={book.title} />
+            {coverSrc ? (
+              <img className={styles.cover} src={coverSrc} alt={book.title} />
+            ) : (
+              <div className={styles.coverPlaceholder}>Нет обложки</div>
+            )}
           </div>
 
           <div className={styles.details}>

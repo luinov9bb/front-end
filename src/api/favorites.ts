@@ -1,5 +1,7 @@
 import { apiFetch } from "./client";
+import { mapApiBookToBook } from "./mappers/book";
 import type { Book } from "../types/catalog";
+import type { ApiBookDto } from "./types/bookApi";
 import type { ResponceMsg } from "./types/authApi";
 
 export interface FavoriteDto {
@@ -13,18 +15,7 @@ function readFavorite(row: Record<string, unknown>): FavoriteDto {
   const bookRaw = row.book ?? row.Book;
   let book: Book | null | undefined;
   if (bookRaw && typeof bookRaw === "object") {
-    const b = bookRaw as Record<string, unknown>;
-    book = {
-      id: Number(b.id ?? b.Id ?? 0),
-      title: String(b.title ?? b.Title ?? ""),
-      author: String(b.author ?? b.Author ?? ""),
-      category: String(b.category ?? b.Category ?? ""),
-      description: String(b.description ?? b.Description ?? ""),
-      price: Number(b.price ?? b.Price ?? 0),
-      stock: Number(b.stock ?? b.Stock ?? 0),
-      isDeleted: Boolean(b.isDeleted ?? b.IsDeleted),
-      coverImageUrl: (b.coverImageUrl ?? b.CoverImageUrl) as string | null,
-    };
+    book = mapApiBookToBook(bookRaw as ApiBookDto);
   }
   return {
     id: Number(row.id ?? row.Id ?? 0),
